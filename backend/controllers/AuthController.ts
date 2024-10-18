@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from "express";
 import { firebaseApp } from "../services/Firebase";
 import { ErrorInfo } from "firebase-admin/lib/utils/error";
-import { UserData } from "../Entities/UserData";
+import { UserData } from "../entities/UserData";
 import jwt from "jsonwebtoken";
 
 class AuthController {
