@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "16.4.5",
     "express": "4.21.1",
     "jsonwebtoken": "^9.0.2"

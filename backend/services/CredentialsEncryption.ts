@@ -1,20 +1,15 @@
-import crypto from "crypto";
+import CryptoJS from "crypto-js";
 import { Credentials } from "../entities/Credentials";
 require("dotenv").config();
 
 const secretKey = process.env.SECRET_KEY ?? "";
-const algotithm = process.env.ALGORITHM ?? "";
 
 if (Buffer.byteLength(secretKey) !== 32) {
   throw new Error("Secret key must be 32 bytes long");
 }
 
 const encrypt = (str: string): string => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algotithm, Buffer.from(secretKey), iv);
-  let encrypted = cipher.update(str, "utf8", "hex");
-  encrypted += cipher.final("hex");
-  return iv.toString("hex") + ":" + encrypted;
+  return CryptoJS.AES.encrypt(str, secretKey).toString();
 };
 
 const getCredentials = async (): Promise<Credentials> => {
