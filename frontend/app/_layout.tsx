@@ -2,9 +2,6 @@ import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { Stack } from "expo-router";
 import { View, ActivityIndicator } from "react-native";
-
-import { useCredentialStore } from "@/stores/CredentialStore";
-import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
 
 export default function RootLayout() {
@@ -31,7 +28,7 @@ export default function RootLayout() {
     };
     fetchCredentials();
   }, []);
-  
+
   if (loading) {
     return (
       <View className="bg-black flex-1">
@@ -51,10 +48,12 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="welcome"
-         options={{
-          headerShown: false,
-        }}/>
+        <Stack.Screen
+          name="welcome"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
     </View>
   );
