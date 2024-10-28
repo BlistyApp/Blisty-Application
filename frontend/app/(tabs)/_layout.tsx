@@ -13,12 +13,6 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            href: null,
-          }}
-        />
-        <Tabs.Screen
-          name="chats"
-          options={{
             title: "Chat",
             tabBarIcon: ({ focused }) => (
               <TabBarIcon name="message1" focused={focused} />

@@ -9,7 +9,9 @@ export default function Account() {
   return (
     <View className="bg-white flex-1 items-center">
       <View className="flex-1 justify-center items-center bg-white">
-        <Text className="">Logueado como {user?.email}</Text>
+        <Text className="">
+          Logueado como {user ? user.email : "not found"}
+        </Text>
         <Pressable
           onPress={async () => {
             await fbAuth.signOut();

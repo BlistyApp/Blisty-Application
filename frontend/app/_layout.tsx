@@ -3,8 +3,6 @@ import { View, ActivityIndicator } from "react-native";
 
 import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
-import { Stack } from "expo-router";
-import { View, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 
 import { Tabs } from "expo-router";
@@ -65,7 +63,6 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
-
       </Stack>
     </View>
   );
