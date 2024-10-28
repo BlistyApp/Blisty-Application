@@ -1,8 +1,14 @@
+import { Stack } from "expo-router/stack";
+import { View, ActivityIndicator } from "react-native";
+
 import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { Stack } from "expo-router";
 import { View, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
+
+import { Tabs } from "expo-router";
+import { TabBarIcon } from "@/components/icons/Icons";
 
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
@@ -40,7 +46,6 @@ export default function RootLayout() {
   return (
     <View style={{ flex: 1 }}>
       <Stack>
-        <Stack.Screen name="index" />
         <Stack.Screen name="login" />
         <Stack.Screen
           name="register"
@@ -54,6 +59,13 @@ export default function RootLayout() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
+
       </Stack>
     </View>
   );
