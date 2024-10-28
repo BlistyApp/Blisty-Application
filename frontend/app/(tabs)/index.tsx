@@ -1,10 +1,9 @@
-import { Link, Stack, useRouter } from "expo-router";
+import { Link, Stack, useRouter, Href } from "expo-router";
 import { Text, View, ActivityIndicator, Pressable } from "react-native";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useUserStore } from "@/stores/UserStore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-import "../global.css";
 
 export default function Index() {
   const router = useRouter();
@@ -30,17 +29,19 @@ export default function Index() {
         if (!loggedIn) {
           console.log("Logged in");
           setLoggedIn(true);
+          router.replace("/chats");
         }
       } else {
         console.log("Not logged in");
         router.replace("/welcome");
         clearUser();
+        setLoggedIn(false);
       }
     });
     return subscriber;
-  }, [initializing, loggedIn]);
+  }, [initializing, user]);
 
-  if (loggedIn) {
+  /* if (loggedIn) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
         <Text className="">Logueado como {user?.email}</Text>
@@ -55,7 +56,7 @@ export default function Index() {
         </Pressable>
       </View>
     );
-  }
+  } */
 
   return (
     <View className="bg-black flex-1">
