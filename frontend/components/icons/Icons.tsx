@@ -1,7 +1,7 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { type IconProps } from "@expo/vector-icons/build/createIconSet";
 import { type ComponentProps } from "react";
-import { View, Text } from "react-native";
+import { Text } from "react-native";
 
 interface TabBarProps {
   focused: boolean;

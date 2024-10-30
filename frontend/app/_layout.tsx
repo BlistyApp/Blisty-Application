@@ -1,6 +1,6 @@
-import { Stack } from "expo-router/stack";
 import { View, ActivityIndicator } from "react-native";
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import {} from "react-native";
 import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
@@ -9,96 +9,90 @@ import { Tabs, useRouter } from "expo-router";
 import { TabBarIcon } from "@/components/icons/Icons";
 import { useUserStore } from "@/stores/UserStore";
 import { onAuthStateChanged } from "firebase/auth";
+import { Stack } from "expo-router";
+import Welcome from "./welcome";
 
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
-  const { initApp, initAuth } = useFirebaseStore();
+  const { initFirebase, fbAuth } = useFirebaseStore();
   const [loading, setLoading] = useState(true);
   const [authInit, setAuthInit] = useState(false);
-  const { fbAuth } = useFirebaseStore();
-  const { user, setUser, clearUser } = useUserStore();
   const [initializing, setInitializing] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
+  const { user, setUser, clearUser } = useUserStore();
+
+  const onAuthStateChanged = (user: any) => {
+    if (user) {
+      console.log("User is signed in", user);
+      setUser({
+        email: user.email,
+        name: user.displayName,
+        profilePic: user.photoURL,
+        uid: user.uid,
+      });
+    } else {
+      console.log("User is signed out");
+      clearUser();
+    }
+  };
 
   useEffect(() => {
-    const fetchCredentials = async () => {
+    const initializeAuth = async () => {
       try {
         await getCredentials();
         await decrypt();
-        const { credentials } = useCredentialStore.getState();
-        await initApp(credentials);
-        if (!authInit) {
-          await initAuth(useFirebaseStore.getState().fbApp);
-          setAuthInit(true);
-        }
+        initFirebase();
         setLoading(false);
       } catch (e) {
-        console.error(e);
+        console.error("Initialization error:", e);
+        setLoading(false);
       }
     };
-    fetchCredentials();
+    initializeAuth();
   }, []);
+  
+  useEffect(() => {
+    if (fbAuth) {
+      fbAuth.onAuthStateChanged(onAuthStateChanged);
+    }
+  }, [fbAuth]);
 
   useEffect(() => {
     setInitializing(false);
   }, []);
 
-  useEffect(() => {
-    const subscriber = onAuthStateChanged(fbAuth, (user) => {
-      if (user) {
-        setUser({
-          uid: user.uid,
-          email: user.email ?? "",
-          name: user.displayName ?? "",
-          profilePic: user.photoURL ?? "",
-        });
-        if (!loggedIn) {
-          console.log("Logged in");
-          setLoggedIn(true);
-          router.replace("/");
-        }
-      } else {
-        console.log("Not logged in");
-        router.replace("/welcome");
-        clearUser();
-        setLoggedIn(false);
-      }
-    });
-    return subscriber;
-  }, [initializing, user]);
-
   if (loading) {
     return (
-      <View className="bg-black flex-1">
-        <ActivityIndicator size="large" color="#ffff" />
-      </View>
+      <SafeAreaProvider>
+        <View className="bg-black flex-1">
+          <ActivityIndicator size="large" color="#ffff" />
+        </View>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <Stack>
-        <Stack.Screen name="login" />
-        <Stack.Screen
-          name="register"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="welcome"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </View>
+    <Stack>
+      <Stack.Screen
+        name="welcome"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="login" />
+      <Stack.Screen
+        name="register"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack>
   );
 }

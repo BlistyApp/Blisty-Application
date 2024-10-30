@@ -17,10 +17,9 @@ export interface Credentials {
 }
 
 export interface FirebaseState {
-  fbApp: FirebaseApp;
-  fbAuth: Auth;
-  initApp: (credentials: Credentials) => Promise<void>;
-  initAuth: (fbApp: FirebaseApp) => Promise<void>;
+  fbApp: FirebaseApp | null;
+  fbAuth: Auth | null;
+  initFirebase: () => Promise<void>;
 }
 
 export interface UserState {

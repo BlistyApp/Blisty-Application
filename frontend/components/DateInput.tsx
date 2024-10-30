@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import DateTimePicker, {
   AndroidNativeProps,
-  Event,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useState } from "react";
@@ -22,7 +21,7 @@ export function DateInput({
   onChange,
   mode,
   display,
-  error
+  error,
 }: DateInputProps) {
   const [show, setShow] = useState(false);
   const toggleShow = () => setShow(!show);

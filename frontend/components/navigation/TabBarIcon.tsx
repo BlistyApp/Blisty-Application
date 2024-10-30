@@ -2,7 +2,7 @@
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { type IconProps } from "@expo/vector-icons/build/createIconSet";
-import { useEffect, type ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import { View } from "react-native";
 
 interface TabBarIconProps {
@@ -24,4 +24,3 @@ export function TabBarIcon({
     </View>
   );
 }
-

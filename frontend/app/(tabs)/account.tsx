@@ -14,7 +14,7 @@ export default function Account() {
         </Text>
         <Pressable
           onPress={async () => {
-            await fbAuth.signOut();
+            await fbAuth?.signOut();
             clearUser();
           }}
           className="bg-black p-2 rounded-md mt-2"
