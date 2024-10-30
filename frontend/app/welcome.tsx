@@ -2,15 +2,11 @@ import { View, Text, Pressable } from "react-native";
 import LogoBlisty from "@/components/icons/LogoBlisty";
 import WaveBackground from "@/components/icons/WaveBackground";
 import { useRouter } from "expo-router";
-import { useUserStore } from "@/stores/UserStore";
+
+import "@/styles/global.css";
 
 export default function Welcome() {
   const router = useRouter();
-  const { user } = useUserStore();
-
-  if (user) {
-    router.replace("/(tabs)");
-  }
 
   const handleLogin = () => {
     router.replace("/login");

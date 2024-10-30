@@ -1,26 +1,17 @@
 import { View, ActivityIndicator } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import {} from "react-native";
 import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
 
-import { Tabs, useRouter } from "expo-router";
-import { TabBarIcon } from "@/components/icons/Icons";
 import { useUserStore } from "@/stores/UserStore";
-import { onAuthStateChanged } from "firebase/auth";
 import { Stack } from "expo-router";
-import Welcome from "./welcome";
 
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
   const { initFirebase, fbAuth } = useFirebaseStore();
   const [loading, setLoading] = useState(true);
-  const [authInit, setAuthInit] = useState(false);
-  const [initializing, setInitializing] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const router = useRouter();
-  const { user, setUser, clearUser } = useUserStore();
+  const { setUser, clearUser } = useUserStore();
 
   const onAuthStateChanged = (user: any) => {
     if (user) {
@@ -51,16 +42,12 @@ export default function RootLayout() {
     };
     initializeAuth();
   }, []);
-  
+
   useEffect(() => {
     if (fbAuth) {
       fbAuth.onAuthStateChanged(onAuthStateChanged);
     }
   }, [fbAuth]);
-
-  useEffect(() => {
-    setInitializing(false);
-  }, []);
 
   if (loading) {
     return (
