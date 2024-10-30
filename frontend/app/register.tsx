@@ -8,6 +8,7 @@ import { DropDownList } from "@/components/DropDownList";
 import { RegisterType, Psychologist } from "@/types/RegisterType";
 import { DateInput } from "@/components/DateInput";
 import { useEffect } from "react";
+import { useFirebaseStore } from "@/stores/FirebaseStore";
 
 const StyledView = styled(View);
 
@@ -16,15 +17,13 @@ type FormsType = RegisterType | Psychologist;
 export default function Register() {
   const router = useRouter();
   const {
-    register,
-    setValue,
     handleSubmit,
     control,
-    reset,
     watch,
     unregister,
     formState: { errors },
   } = useForm<FormsType>();
+  const { fbAuth } = useFirebaseStore();
 
   const onSubmit = (data: any) => {
     console.log(data);

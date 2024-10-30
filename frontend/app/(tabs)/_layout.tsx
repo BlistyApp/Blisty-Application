@@ -1,5 +1,5 @@
-import { Tabs } from "expo-router";
 import { TabBarIcon, TabBarLabel } from "@/components/icons/Icons";
+import { Tabs } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
@@ -11,7 +11,7 @@ export default function TabsLayout() {
         }}
       >
         <Tabs.Screen
-          name="index"
+          name="chats"
           options={{
             title: "Chat",
             tabBarIcon: ({ focused }) => (
@@ -32,6 +32,12 @@ export default function TabsLayout() {
             tabBarLabel: ({ children, focused }) => (
               <TabBarLabel focused={focused}>{children}</TabBarLabel>
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="index"
+          options={{
+            href: null,
           }}
         />
       </Tabs>

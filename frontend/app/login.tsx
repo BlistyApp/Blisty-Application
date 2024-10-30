@@ -36,6 +36,9 @@ export default function Login() {
   const onSubmit = async (data: LoginType) => {
     setLoading(true);
     try {
+      if (!fbAuth) {
+        return;
+      }
       await signInWithEmailAndPassword(fbAuth, data.email, data.password);
       router.replace("/");
     } catch (e: any) {
