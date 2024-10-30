@@ -11,11 +11,11 @@ import { Label } from "@/components/Label";
 import { Input } from "@/components/Input";
 import { Stack, useRouter } from "expo-router";
 import { styled } from "nativewind";
-import { useForm, Controller, SubmitErrorHandler } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { LoginType } from "@/types/LoginType";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const StyledView = styled(View);
 
@@ -24,14 +24,9 @@ const { width, height } = Dimensions.get("window");
 export default function Login() {
   const router = useRouter();
   const {
-    register,
-    setValue,
     handleSubmit,
     control,
-    reset,
     setError,
-    clearErrors,
-    watch,
     formState: { errors },
   } = useForm<LoginType>();
 
@@ -43,11 +38,12 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(fbAuth, data.email, data.password);
       router.replace("/");
-    } catch (e) {
+    } catch (e: any) {
       setError("root", {
         type: "manual",
         message: "Correo y/o contraseña incorrectos",
       });
+      console.log(e);
     } finally {
       setLoading(false);
     }

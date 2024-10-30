@@ -5,15 +5,13 @@ import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
 
-import { Tabs } from "expo-router";
-import { TabBarIcon } from "@/components/icons/Icons";
-
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
   const { initApp, initAuth } = useFirebaseStore();
   const [loading, setLoading] = useState(true);
   const [authInit, setAuthInit] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchCredentials = async () => {
       try {
