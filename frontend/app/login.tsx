@@ -40,7 +40,7 @@ export default function Login() {
         return;
       }
       await signInWithEmailAndPassword(fbAuth, data.email, data.password);
-      router.replace("/");
+      router.replace("/(tabs)/chats");
     } catch (e: any) {
       setError("root", {
         type: "manual",

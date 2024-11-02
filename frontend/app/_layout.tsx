@@ -1,16 +1,16 @@
-import { View, ActivityIndicator } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useCredentialStore } from "@/stores/CredentialStore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
 
 import { useUserStore } from "@/stores/UserStore";
 import { Stack } from "expo-router";
+import { Loading } from "@/components/Loading";
 
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
   const { initFirebase, fbAuth } = useFirebaseStore();
   const [loading, setLoading] = useState(true);
+  const [initializing, setInitializing] = useState(true);
   const { setUser, clearUser } = useUserStore();
 
   const onAuthStateChanged = (user: any) => {
@@ -21,11 +21,13 @@ export default function RootLayout() {
         name: user.displayName,
         profilePic: user.photoURL,
         uid: user.uid,
+        role: "patient",
       });
     } else {
       console.log("User is signed out");
       clearUser();
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -34,10 +36,8 @@ export default function RootLayout() {
         await getCredentials();
         await decrypt();
         initFirebase();
-        setLoading(false);
       } catch (e) {
         console.error("Initialization error:", e);
-        setLoading(false);
       }
     };
     initializeAuth();
@@ -49,18 +49,22 @@ export default function RootLayout() {
     }
   }, [fbAuth]);
 
-  if (loading) {
-    return (
-      <SafeAreaProvider>
-        <View className="bg-black flex-1">
-          <ActivityIndicator size="large" color="#ffff" />
-        </View>
-      </SafeAreaProvider>
-    );
+  useEffect(() => {
+    setInitializing(false);
+  }, []);
+
+  if (loading || initializing) {
+    return <Loading />;
   }
 
   return (
     <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="welcome"
         options={{
@@ -80,6 +84,7 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="md" />
     </Stack>
   );
 }

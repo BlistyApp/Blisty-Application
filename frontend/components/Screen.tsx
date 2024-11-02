@@ -1,5 +1,4 @@
 import { View } from "react-native";
-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function Screen({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-import React, { useCallback, useRef, useState } from "react";
+import React, { Fragment, useCallback, useRef, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 
 type OptionItem = {
@@ -54,6 +54,22 @@ export function DropDownList({
             style={[styles.backdrop]}
           >
             <View style={[styles.options /*, { top: -100 }*/]}>
+              {/* {data.map((item) => (
+                <Fragment key={item.value}>
+                  <Pressable
+                    style={({ pressed }) => [
+                      styles.optionItem,
+                      {
+                        opacity: pressed ? 0.8 : 1,
+                      },
+                    ]}
+                    onPress={() => onSelect(item)}
+                  >
+                    <Text>{item.label}</Text>
+                  </Pressable>
+                  <View style={styles.separator} />
+                </Fragment>
+              ))} */}
               <FlatList
                 keyExtractor={(item) => item.value}
                 data={data}

@@ -33,4 +33,5 @@ export interface User {
   name: string;
   profilePic?: string;
   uid: string;
+  role: "psychologist" | "patient";
 }

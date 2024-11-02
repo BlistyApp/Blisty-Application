@@ -11,7 +11,7 @@ npm-debug.*
 web-build/
 .envqeee
 .vscode
-
+android/
 # macOS
 .DS_Store
 
