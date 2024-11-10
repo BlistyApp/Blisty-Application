@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import { Credentials } from "./entities/Credentials";
 import { getHashedCredentials } from "./services/CredentialsEncryption";
-import ChatRouter from "./routes/chat";
+import ChatRouter from "./routes/Chat";
 require("dotenv").config();
 
 const server = express();
