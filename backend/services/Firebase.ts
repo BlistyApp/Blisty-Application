@@ -9,4 +9,5 @@ const serviceAccount: ServiceAccount = {
 
 export const fbAdmin = initializeApp({
   credential: cert(serviceAccount),
+  databaseURL: process.env.DATABASE_URL,
 });
