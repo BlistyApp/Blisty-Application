@@ -5,34 +5,49 @@ import { useRouter } from "expo-router";
 import { styled } from "nativewind";
 import { useForm, Controller } from "react-hook-form";
 import { DropDownList } from "@/components/DropDownList";
-import { RegisterType, Psychologist } from "@/types/RegisterType";
+import { type RegisterType } from "@/types/RegisterType";
 import { DateInput } from "@/components/DateInput";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import KeyboardViewCustom from "@/components/KeyboardViewCustom";
+import { useFirebaseStore } from "@/stores/FirebaseStore";
+import LoadingModal from "@/components/LoadingModal";
+import { useUserStore } from "@/stores/UserStore";
 
 const StyledView = styled(View);
 
-type FormsType = RegisterType | Psychologist;
-
 export default function Register() {
   const router = useRouter();
+  const { register } = useFirebaseStore((state) => state);
   const {
     handleSubmit,
     control,
     watch,
     unregister,
+    setError,
     formState: { errors },
-  } = useForm<FormsType>();
+  } = useForm<RegisterType>();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: RegisterType) => {
+    setLoading(true);
+    try {
+      await register(data);
+    } catch (e: any) {
+      setError("root", {
+        type: "manual",
+        message: "Usuario ya registrado",
+      });
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (watch("type") === "patient") {
+    if (watch("role") === "patient") {
       unregister("tuition_number");
     }
-  }, [watch("type")]);
+  }, [watch("role")]);
 
   return (
     <KeyboardViewCustom>
@@ -47,12 +62,12 @@ export default function Register() {
           Unete!
         </Text>
         <View
-          style={{ paddingTop: watch("type") ? 260 : 384 }}
+          style={{ paddingTop: watch("role") ? 260 : 384 }}
           className="px-6 w-full"
         >
           <View className="my-3 relative">
             <View className="my-1">
-              <Label className={`${errors.type && "text-red-500"}`}>
+              <Label className={`${errors.role && "text-red-500"}`}>
                 Tipo de usuario
               </Label>
               <Controller
@@ -65,22 +80,27 @@ export default function Register() {
                       { label: "Paciente", value: "patient" },
                     ]}
                     onChange={onChange}
-                    error={errors.type !== undefined}
+                    error={errors.role !== undefined}
                   />
                 )}
-                name="type"
+                name="role"
                 rules={{ required: "Debe seleccionar un tipo de usuario" }}
               />
-              {errors.type && (
+              {errors.role && (
                 <Text className="text-red-500 text-sm">
-                  {errors.type.message}
+                  {errors.role.message}
                 </Text>
               )}
             </View>
 
-            {watch("type") && (
+            {watch("role") && (
               <>
-                {watch("type") === "psychologist" && (
+                {errors.root && (
+                  <Text className="text-red-500 text-sm">
+                    {errors.root.message}
+                  </Text>
+                )}
+                {watch("role") === "psychologist" && (
                   <View className="my-1">
                     <Label>Numero de Colegiatura</Label>
                     <Controller
@@ -104,7 +124,28 @@ export default function Register() {
                     )}
                   </View>
                 )}
-
+                <View className="my-1">
+                  <Label>Nombre</Label>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        placeholder="Nombres y Apellidos"
+                        keyboardType={"default"}
+                        onBlur={onBlur}
+                        onChangeText={(value: any) => onChange(value)}
+                        value={value}
+                      />
+                    )}
+                    name="name"
+                    rules={{ required: "Digite su número de colegiatura" }}
+                  />
+                  {"name" in errors && (
+                    <Text className="text-red-500 text-sm">
+                      {errors.name?.message}
+                    </Text>
+                  )}
+                </View>
                 <View className="flex-row w-full">
                   <View className="my-1 w-1/2 pr-2">
                     <Label className={`${errors.phone && "text-red-500"}`}>
@@ -223,7 +264,7 @@ export default function Register() {
           <Pressable
             className="h-12 rounded-full py-2 mt-1 items-center justify-center"
             onPress={() => {
-              router.navigate("/login");
+              router.replace("/(auth)/login");
             }}
           >
             <Text className="font-light text-lg text-center">
@@ -235,6 +276,7 @@ export default function Register() {
           </Pressable>
         </View>
       </View>
+      <LoadingModal loading={loading} />
     </KeyboardViewCustom>
   );
 }

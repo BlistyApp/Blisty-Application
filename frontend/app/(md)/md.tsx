@@ -15,97 +15,98 @@ import { SendIcon } from "@/components/icons/Icons";
 import KeyboardViewCustom from "@/components/KeyboardViewCustom";
 import { MessageType } from "@/types/MessageType";
 import { useUserStore } from "@/stores/UserStore";
+import { getRoomId } from "@/lib/utils";
+import {
+  doc,
+  collection,
+  setDoc,
+  addDoc,
+  Timestamp,
+  query,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import { useFirebaseStore } from "@/stores/FirebaseStore";
 
 const height = Dimensions.get("window").height;
 
-const _MESSAGES: MessageType[] = [
-  {
-    senderName: "Alice",
-    type: "contact",
-    text: "Hey, how's it going?",
-    createdAt: new Date("2024-11-01T10:00:00Z"),
-    userId: "pYJYugukQpNrZkOCNNbtyurn6Gz1",
-  },
-  {
-    senderName: "Bob",
-    type: "contact",
-    text: "Hi Alice! I'm good, just working on the project. You?",
-    createdAt: new Date("2024-11-01T10:01:00Z"),
-    userId: "30492-0500",
-  },
-  {
-    senderName: "Alice",
-    type: "contact",
-    text: "Same here! Are you still stuck with that bug?",
-    createdAt: new Date("2024-11-01T10:02:30Z"),
-    userId: "pYJYugukQpNrZkOCNNbtyurn6Gz1",
-  },
-  {
-    senderName: "Bob",
-    type: "contact",
-    text: "Yes! Can't figure it out. Have any suggestions?",
-    createdAt: new Date("2024-11-01T10:03:15Z"),
-    userId: "30492-0500",
-  },
-  {
-    senderName: "Alice",
-    type: "contact",
-    text: "I might. Want to hop on a call to check it together?",
-    createdAt: new Date("2024-11-01T10:04:00Z"),
-    userId: "pYJYugukQpNrZkOCNNbtyurn6Gz1",
-  },
-  {
-    senderName: "Bob",
-    type: "contact",
-    text: "Sure, sounds great! Give me a minute to set it up.",
-    createdAt: new Date("2024-11-01T10:05:10Z"),
-    userId: "30492-0500",
-  },
-  {
-    senderName: "Blisty",
-    type: "ia_suggestion",
-    text: "Why don't you try restarting the server?",
-    createdAt: new Date("2024-11-01T10:06:00Z"),
-    userId: "blisty",
-  },
-];
-
 export default function Md() {
   const { toUser } = useMdStore();
+  const { db } = useFirebaseStore((state) => state);
   const { user } = useUserStore();
   const router = useRouter();
   const messageInRef = useRef("");
   const inRef = useRef<TextInput>(null);
   const scrollRef = useRef<ScrollView>(null);
 
-  const [messages, setMessages] = useState<MessageType[]>(_MESSAGES);
+  const [messages, setMessages] = useState<MessageType[]>();
 
   useEffect(() => {
     scrollToEnd();
   }, [messages]);
 
-  if (!toUser || !user) {
+  useEffect(() => {
+    createNewRoom();
+    if (!toUser || !user || !db) {
+      return;
+    }
+    const roomId = getRoomId(user.uid, toUser?.uid);
+    const roomRef = doc(db, "rooms", roomId);
+    const messagesRef = collection(roomRef, "messages");
+    const messageQuery = query(messagesRef, orderBy("createdAt", "asc"));
+
+    const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
+      const allMessages = querySnapshot.docs.map((doc) =>
+        doc.data()
+      ) as MessageType[];
+      console.log(allMessages);
+      setMessages([...allMessages]);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (!toUser || !user || !db) {
     return;
   }
 
-  const onSend = () => {
+  const onSend = async () => {
     if (messageInRef.current.trim() === "") return;
-    setMessages([
-      ...messages,
-      {
+
+    try {
+      /* ------------------------
+       const roomId = getRoomId(user.uid, toUser.uid);
+      */
+      const roomId = getRoomId(user.uid, toUser.uid);
+      const roomRef = doc(db, "rooms", roomId);
+      const messagesRef = collection(roomRef, "messages");
+      const newMessage = await addDoc(messagesRef, {
         senderName: user?.name,
         type: "contact",
         text: messageInRef.current,
-        createdAt: new Date(),
+        createdAt: Timestamp.fromDate(new Date()),
         userId: user?.uid,
-      },
-    ]);
-    messageInRef.current = "";
-    if (inRef) inRef?.current?.clear();
+      });
+      messageInRef.current = "";
+      if (inRef) inRef?.current?.clear();
+      console.log("Document written with ID: ", newMessage.id);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const scrollToEnd = () => {
     scrollRef.current?.scrollToEnd({ animated: true });
+  };
+
+  const createNewRoom = async () => {
+    const roomId = getRoomId(user.uid, toUser.uid);
+    await setDoc(doc(db, "rooms", roomId), {
+      roomId,
+      users: [user.uid, toUser.uid],
+      createdAt: Timestamp.fromDate(new Date()),
+      end: false,
+    });
   };
 
   return (

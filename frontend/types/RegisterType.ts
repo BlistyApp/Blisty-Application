@@ -1,12 +1,16 @@
-export interface RegisterType {
+export type RegisterType = (RegisterPatient | RegisterPsychologist) & {
+  role: "patient" | "psychologist";
+};
+
+export interface RegisterPatient {
   name: string;
   birth_day: Date;
   phone: string;
   email: string;
   password: string;
-  type: string;
+  profilePic: string;
 }
 
-export interface Psychologist extends RegisterType {
+export interface RegisterPsychologist extends RegisterPatient {
   tuition_number: string;
 }

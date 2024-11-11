@@ -2,12 +2,14 @@ import { View, Text, StatusBar, Dimensions } from "react-native";
 import { Screen } from "@/components/Screen";
 import { useUserStore } from "@/stores/UserStore";
 import ChatList from "@/components/ChatList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatUser } from "@/types/ChatUser";
 import { Loading } from "@/components/Loading";
 import { useRouter } from "expo-router";
 import { useMdStore } from "@/stores/MdStore";
 import ChatItem from "@/components/ChatItem";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import { useFirebaseStore } from "@/stores/FirebaseStore";
 
 const height = Dimensions.get("window").height;
 
@@ -81,17 +83,38 @@ const _USERS = [
 export default function Chats() {
   const { user } = useUserStore();
   const { setToUser } = useMdStore();
+  const { db } = useFirebaseStore((state) => state);
   const router = useRouter();
 
-  const [users, setUsers] = useState<ChatUser[] | null>(_USERS);
+  const [users, setUsers] = useState<ChatUser[] | null>([]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      getRooms();
+    }
+  }, []);
 
   if (!user) {
     return null;
   }
 
+  const getRooms = async () => {
+    if (!db) return;
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("uid", "!=", user.uid));
+    let data = [] as ChatUser[];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      data.push({ ...(doc.data() as ChatUser) });
+    });
+    setUsers(data);
+
+    console.log(data);
+  };
+
   const handlePress = (item: ChatUser) => {
     setToUser(item);
-    router.push("/md");
+    router.push("/(md)/md");
   };
 
   return (
@@ -108,8 +131,12 @@ export default function Chats() {
         >
           <Text className="text-white text-2xl font-extrabold">Blisty</Text>
         </View>
-        <View className="h-2" />
-        <ChatItem item={_IA} handlePress={handlePress} />
+        {user.role !== "psychologist" && (
+          <>
+            <View className="h-2" />
+            <ChatItem item={_IA} handlePress={handlePress} />
+          </>
+        )}
         <View className="bg-white mt-3 flex-1 w-full items-center">
           <Text className="text-lg font-semibold text-neutral-800 mb-2">
             Conversaciones con{" "}
@@ -118,9 +145,7 @@ export default function Chats() {
           {users?.length ? (
             <ChatList users={users} handlePress={handlePress} />
           ) : (
-            <View className="z-10 absolute w-1/2 h-1/4 flex-1 bg-white opacity-50 rounded-3xl top-1/3">
-              <Loading className="rounded-3xl" />
-            </View>
+            <Text className="text-neutral-500">No hay conversaciones</Text>
           )}
         </View>
       </View>

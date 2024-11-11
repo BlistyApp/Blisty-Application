@@ -14,15 +14,14 @@ import { styled } from "nativewind";
 import { useForm, Controller } from "react-hook-form";
 import { LoginType } from "@/types/LoginType";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import LoadingModal from "@/components/LoadingModal";
 
 const StyledView = styled(View);
 
-const { width, height } = Dimensions.get("window");
-
 export default function Login() {
   const router = useRouter();
+  const { login } = useFirebaseStore((state) => state);
   const {
     handleSubmit,
     control,
@@ -31,16 +30,11 @@ export default function Login() {
   } = useForm<LoginType>();
 
   const [loading, setLoading] = useState(false);
-  const { fbAuth } = useFirebaseStore();
 
   const onSubmit = async (data: LoginType) => {
     setLoading(true);
     try {
-      if (!fbAuth) {
-        return;
-      }
-      await signInWithEmailAndPassword(fbAuth, data.email, data.password);
-      router.replace("/(tabs)/chats");
+      await login(data);
     } catch (e: any) {
       setError("root", {
         type: "manual",
@@ -134,7 +128,7 @@ export default function Login() {
         <Pressable
           className="h-12 rounded-full py-2 mt-1 items-center justify-center"
           onPress={() => {
-            router.push("/register");
+            router.replace("/(auth)/register");
           }}
         >
           <Text className="font-light text-lg text-center">
@@ -146,18 +140,7 @@ export default function Login() {
         </Pressable>
       </View>
 
-      <Modal animationType="fade" visible={loading} transparent>
-        <View style={{ height, width }} className="justify-center items-center">
-          <View
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-            }}
-            className="w-56 h-56 rounded-2xl justify-center items-center"
-          >
-            <ActivityIndicator size="large" color="white" />
-          </View>
-        </View>
-      </Modal>
+      <LoadingModal loading={loading} />
     </View>
   );
 }

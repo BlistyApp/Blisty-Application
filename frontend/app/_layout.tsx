@@ -3,15 +3,24 @@ import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useEffect, useState } from "react";
 
 import { useUserStore } from "@/stores/UserStore";
-import { Stack } from "expo-router";
+import {
+  router,
+  Stack,
+  useSegments,
+  useRootNavigationState,
+} from "expo-router";
 import { Loading } from "@/components/Loading";
 
 export default function RootLayout() {
   const { getCredentials, decrypt } = useCredentialStore();
-  const { initFirebase, fbAuth } = useFirebaseStore();
+  const { initFirebase, fbAuth, updateUser } = useFirebaseStore(
+    (state) => state
+  );
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
-  const { setUser, clearUser } = useUserStore();
+  const { setUser, clearUser, user } = useUserStore();
+  const segments = useSegments();
+  const navigationState = useRootNavigationState();
 
   const onAuthStateChanged = (user: any) => {
     if (user) {
@@ -21,7 +30,6 @@ export default function RootLayout() {
         name: user.displayName,
         profilePic: user.photoURL,
         uid: user.uid,
-        role: "patient",
       });
     } else {
       console.log("User is signed out");
@@ -50,6 +58,25 @@ export default function RootLayout() {
   }, [fbAuth]);
 
   useEffect(() => {
+    const getUserInf = async () => {
+      if (fbAuth) {
+        await updateUser();
+      }
+    };
+
+    if (navigationState?.key) {
+      const inProtectedPage =
+        segments[0] === "(home)" || segments[0] === "(md)";
+      if (user && !inProtectedPage) {
+        getUserInf();
+        router.replace("/(home)/chats");
+      } else if (!user && inProtectedPage) {
+        router.replace("/welcome");
+      }
+    }
+  }, [navigationState?.key, segments, user]);
+
+  useEffect(() => {
     setInitializing(false);
   }, []);
 
@@ -71,20 +98,14 @@ export default function RootLayout() {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="login" />
       <Stack.Screen
-        name="register"
+        name="(home)"
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen name="md" />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(md)" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -14,8 +14,6 @@ export default function Index() {
     if (!initializing) {
       if (user === null) {
         router.replace("/welcome");
-      } else {
-        router.replace("/(tabs)/chats");
       }
     }
   }, [user, initializing]);
