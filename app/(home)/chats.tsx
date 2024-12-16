@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -28,16 +29,6 @@ import { useErrorStore } from "@/stores/ErrorsStore";
 import BlistyError from "@/lib/blistyError";
 
 const height = Dimensions.get("window").height;
-
-const _IA = {
-  name: "Blisty",
-  uid: "blisty",
-  lastMessage: {
-    fromUid: "blisty",
-    text: "¡Hola! ¿Cómo estás?",
-    createdAt: Timestamp.fromDate(new Date()),
-  },
-};
 
 export default function Chats() {
   const { user } = useUserStore();
@@ -93,16 +84,16 @@ export default function Chats() {
               async (querySnapshot) => {
                 if (querySnapshot.empty) return;
                 const lastMessage = querySnapshot.docs[0].data();
-                console.log("DEL ROOM");
-                console.log(roomData);
-                console.log("LastMessage");
-                console.log(lastMessage);
+                //console.log("DEL ROOM");
+                //console.log(roomData);
+                //console.log("LastMessage");
+                //console.log(lastMessage);
                 const to =
                   roomData.users[0].uid === user.uid
                     ? roomData.users[1]
                     : roomData.users[0];
-                console.log("TO");
-                console.log(to);
+                //console.log("TO");
+                //console.log(to);
                 if (to.uid === "blisty") {
                   setIaChat({
                     ...iaChat,
@@ -208,7 +199,21 @@ export default function Chats() {
         {user.role !== "psychologist" && (
           <>
             <View className="h-2" />
-            <ChatItem item={_IA} handlePress={handlePressIA} />
+            <ChatItem
+              item={
+                iaChat.lastMessage
+                  ? iaChat
+                  : {
+                      ...iaChat,
+                      lastMessage: {
+                        fromUid: "blisty",
+                        text: "¡Hola! ¿Cómo estás?",
+                        createdAt: Timestamp.fromDate(new Date()),
+                      },
+                    }
+              }
+              handlePress={handlePressIA}
+            />
           </>
         )}
         <View className="bg-white mt-3 flex-1 w-full items-center">

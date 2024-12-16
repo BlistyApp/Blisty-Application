@@ -1,3 +1,4 @@
+import React from "react";
 import AccountDisplay from "@/components/AccountDisplay";
 import { FieldAccount } from "@/components/FieldAccount";
 import { getUsersData } from "@/lib/gets";
@@ -25,7 +26,7 @@ export default function ContactInf() {
       try {
         if (infoUid) {
           const data = await getUsersData([infoUid]);
-          console.log(data);
+          //console.log(data);
           if (data && data.length > 0) {
             setInfo(data[0]);
             return;

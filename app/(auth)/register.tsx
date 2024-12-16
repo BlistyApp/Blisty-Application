@@ -27,40 +27,9 @@ import { Terms } from "@/components/Terms";
 import { MultiSelection } from "@/components/MultiSelection";
 import BlistyError from "@/lib/blistyError";
 import { getTags } from "@/lib/gets";
+import React from "react";
 
 const StyledView = styled(View);
-
-const specializations = [
-  { label: "Psicología Clínica", value: "Psicología Clínica" },
-  { label: "Psicología Educativa", value: "Psicología Educativa" },
-  {
-    label: "Psicología Organizacional o Industrial",
-    value: "Psicología Organizacional o Industrial",
-  },
-  {
-    label: "Psicología Infantil y del Adolescente",
-    value: "Psicología Infantil y del Adolescente",
-  },
-  { label: "Psicología Forense", value: "Psicología Forense" },
-  { label: "Psicología Social", value: "Psicología Social" },
-  { label: "Neuropsicología", value: "Neuropsicología" },
-  { label: "Psicología de la Salud", value: "Psicología de la Salud" },
-  { label: "Psicología Deportiva", value: "Psicología Deportiva" },
-  {
-    label: "Psicología del Trauma y Estrés Postraumático",
-    value: "Psicología del Trauma y Estrés Postraumático",
-  },
-  {
-    label: "Psicología de la Sexualidad",
-    value: "Psicología de la Sexualidad",
-  },
-  { label: "Psicología Gerontológica", value: "Psicología Gerontológica" },
-  { label: "Psicología Ambiental", value: "Psicología Ambiental" },
-  {
-    label: "Psicoterapia Humanista o Transpersonal",
-    value: "Psicoterapia Humanista o Transpersonal",
-  },
-];
 
 export default function Register() {
   const router = useRouter();

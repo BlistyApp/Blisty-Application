@@ -74,8 +74,8 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
         const data = userSnap.data();
-        console.log("DATA USER");
-        console.log(data);
+        //console.log("DATA USER");
+        //console.log(data);
         if (typeof data.tuition_number === "string") {
           console.log("PSYCHOLOGIST LOGED IN");
 
@@ -93,10 +93,10 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
           const mTagsSnap = await getDocs(mTagsRef);
           const mTagsData = mTagsSnap.docs.map((doc) => doc.data().label);
 
-          console.log("TAGS DATA");
-          console.log(tagsData);
-          console.log("MTAGS DATA");
-          console.log(mTagsData);
+          //console.log("TAGS DATA");
+          //console.log(tagsData);
+          //console.log("MTAGS DATA");
+          //console.log(mTagsData);
 
           setUser({
             name: data?.name as string,

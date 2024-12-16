@@ -1,25 +1,15 @@
-import { View, Text, Pressable, Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { View, Text, Pressable } from "react-native";
 import { ChatUser } from "@/types/ChatUser";
 import { ProfilePicture } from "@/components/ProfilePicture";
 import { useUserStore } from "@/stores/UserStore";
-import { formatDate, getRoomId } from "@/lib/utils";
-import { useFirebaseStore } from "@/stores/FirebaseStore";
-import {
-  collection,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
-import { MessageType } from "@/types/MessageType";
+import { formatDate } from "@/lib/utils";
+
 
 interface ChatItemProps {
   item: ChatUser;
   handlePress: (item: ChatUser) => void;
 }
-
-const height = Dimensions.get("window").height;
 
 export default function ChatItem({ item, handlePress }: ChatItemProps) {
   const { user } = useUserStore();

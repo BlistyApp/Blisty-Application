@@ -53,7 +53,7 @@ export default function RootLayout() {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        console.log("INITIALIZE AUTH");
+        //console.log("INITIALIZE AUTH");
         await getCredentials();
         await decrypt();
         initFirebase();
@@ -103,7 +103,7 @@ export default function RootLayout() {
               segments[0] === "(home)" || segments[0] === "(md)";
             if (user && !inProtectedPage) {
               await updateUser();
-              console.log("changing page");
+              //console.log("changing page");
               router.replace("/(home)/chats");
             } else if (!user && inProtectedPage) {
               router.replace("/welcome");
@@ -125,9 +125,9 @@ export default function RootLayout() {
     if(initializing === false && loading === false) getUserInf();
   }, [navigationState?.key, segments, user, initializing, loading]);
 
-  useEffect(() => {
+/*   useEffect(() => {
     console.log(loading, initializing);
-  }, [loading, initializing]);
+  }, [loading, initializing]); */
 
   useEffect(() => {
     setInitializing(false);

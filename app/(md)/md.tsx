@@ -33,26 +33,7 @@ import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
 import { useErrorStore } from "@/stores/ErrorsStore";
 
-const IA_SUGGESTION = [
-  {
-    from: "blisty",
-    type: "ia_suggestion",
-    text: "Nueva sugerencia",
-    psicoUids: ["WoZyfbB7DcUVaZpKVHdV3rNgEcU2", "TnVHCfgrTsVg1SYy4EfxyWMku6s1"],
-    createdAt: Timestamp.fromDate(new Date()),
-    to: "blisty",
-  },
-  {
-    from: "blisty",
-    type: "contact",
-    text: "Todo muy bienaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    psicoUids: ["WoZyfbB7DcUVaZpKVHdV3rNgEcU2", "TnVHCfgrTsVg1SYy4EfxyWMku6s1"],
-    createdAt: Timestamp.fromDate(new Date(Date.UTC(2024, 10, 13, 17, 0, 0))),
-    to: "blisty",
-  },
-] as MessageType[];
-
-const { height, width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 export default function Md() {
   const { toUser } = useMdStore();
@@ -142,7 +123,7 @@ export default function Md() {
         from: user.uid,
         to: toUser.uid,
       });
-      console.log(new_refresh);
+      //console.log(new_refresh);
     } catch (e) {
       console.error(e);
       if (e instanceof BlistyError) {

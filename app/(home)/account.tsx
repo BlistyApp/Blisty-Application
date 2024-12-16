@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Pressable, StatusBar, Text } from "react-native";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useUserStore } from "@/stores/UserStore";

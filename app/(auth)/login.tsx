@@ -1,11 +1,8 @@
 import {
-  ActivityIndicator,
-  Modal,
   Pressable,
   StatusBar,
   Text,
   View,
-  Dimensions,
 } from "react-native";
 import { Label } from "@/components/Label";
 import { Input } from "@/components/Input";

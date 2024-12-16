@@ -9,13 +9,11 @@ import Icon404 from "@/components/icons/Icon404";
 import { useErrorStore } from "@/stores/ErrorsStore";
 import { useAppKeyStore } from "@/stores/AppKeyStore";
 import { useNavigation } from "expo-router";
-import { useRouter } from "expo-router";
 
 export default function Error() {
   const { clearError } = useErrorStore((state) => state);
   const { updateAppKey } = useAppKeyStore((state) => state);
   const navigation = useNavigation();
-  const router = useRouter();
   return (
     <View
       style={{ height: hp("100%"), width: wp("100%") }}

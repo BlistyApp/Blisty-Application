@@ -13,18 +13,18 @@ export default function Welcome() {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.replace("/login");
+    router.replace("/(auth)/login");
   };
 
   const handleRegister = () => {
-    router.replace("/register");
+    router.replace("/(auth)/register");
   };
 
   return (
     <View
       style={{
+        flex: 1,
         backgroundColor: "white",
-        height: hp("100%"),
         justifyContent: "center",
         alignItems: "center",
       }}
