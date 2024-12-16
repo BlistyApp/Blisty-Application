@@ -41,12 +41,12 @@ export default function Welcome() {
           Blisty!
         </Text>
       </Text>
-      <View className="mt-8 mb-4">
-        <WaveBackground color="#3e009c" top={-1 * hp("16%")} left={wp("0%")} />
-        <View className="bg-[#3e009c] pb-6">
-          <LogoBlisty width={wp("100%")} height={500} />
+      <View className="mt-8 mb-4" style={{ height: hp("55%") }}>
+        <WaveBackground color="#3e009c" top={-1 * hp("15%")} left={wp("0%")} />
+        <View className="bg-[#3e009c]" style={{ height: hp("52%") }}>
+          <LogoBlisty width={wp("100%")} height={hp("50%")} />
         </View>
-        <WaveBackground color="white" top={hp("42%")} left={-1 * wp("4%")} />
+        <WaveBackground color="white" top={hp("36%")} left={-1 * wp("4%")} />
       </View>
 
       <Text className="text-xl text-center text-gray-900 dark:text-white">
