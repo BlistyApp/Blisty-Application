@@ -28,6 +28,7 @@ import {
   orderBy,
   onSnapshot,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
@@ -113,7 +114,11 @@ export default function Md() {
     try {
       const roomId = getRoomId(user.uid, toUser.uid);
       const roomRef = doc(db, "rooms", roomId);
-      await setDoc(roomRef, { last_refresh: Timestamp.fromDate(new Date()) }, { merge: true });
+      await setDoc(
+        roomRef,
+        { last_refresh: Timestamp.fromDate(new Date()) },
+        { merge: true }
+      );
 
       const messagesRef = collection(roomRef, "messages");
       const new_refresh = await addDoc(messagesRef, {
@@ -152,6 +157,10 @@ export default function Md() {
       if (!room.exists()) {
         console.log("room no creado");
         await createNewRoom();
+      } else {
+        await updateDoc(roomRef, {
+          responded: false,
+        });
       }
 
       const messagesRef = collection(roomRef, "messages");
@@ -202,6 +211,7 @@ export default function Md() {
       createdAt: Timestamp.fromDate(new Date()),
       last_refresh: Timestamp.fromDate(new Date()),
       end: false,
+      responded: false,
       userIds: [user.uid, toUser.uid],
     });
   };
