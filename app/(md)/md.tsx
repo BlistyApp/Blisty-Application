@@ -157,12 +157,6 @@ export default function Md() {
       if (!room.exists()) {
         console.log("room no creado");
         await createNewRoom();
-      } else {
-        if (toUser.uid === "blisty") {
-          await updateDoc(roomRef, {
-            responded: false,
-          });
-        }
       }
 
       const messagesRef = collection(roomRef, "messages");
@@ -173,6 +167,13 @@ export default function Md() {
         from: user.uid,
         to: toUser.uid,
       });
+
+      if (toUser.uid === "blisty" && !room.exists()) {
+        await updateDoc(roomRef, {
+          responded: false,
+        });
+      }
+
       console.log(newMessage);
       console.log("Document written with ID: ", newMessage.id);
     } catch (e) {
