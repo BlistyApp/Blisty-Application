@@ -168,7 +168,7 @@ export default function Md() {
         to: toUser.uid,
       });
 
-      if (toUser.uid === "blisty" && !room.exists()) {
+      if (toUser.uid === "blisty" && room.exists()) {
         await updateDoc(roomRef, {
           responded: false,
         });
