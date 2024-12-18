@@ -195,15 +195,36 @@ export default function Md() {
       profilePic: user.profilePic,
     });
     if (toUser.uid === "blisty") {
-      users.push({
-        uid: "blisty",
-        name: "Blisty",
+      await setDoc(doc(db, "rooms", roomId), {
+        roomId,
+        users: [
+          ...users,
+          {
+            uid: "blisty",
+            name: "Blisty",
+          },
+        ],
+        createdAt: Timestamp.fromDate(new Date()),
+        last_refresh: Timestamp.fromDate(new Date()),
+        end: false,
+        responded: false,
+        userIds: [user.uid, toUser.uid],
       });
     } else {
-      users.push({
-        uid: toUser.uid,
-        name: toUser.name,
-        profilePic: toUser.profilePic,
+      await setDoc(doc(db, "rooms", roomId), {
+        roomId,
+        users: [
+          ...users,
+          {
+            uid: toUser.uid,
+            name: toUser.name,
+            profilePic: toUser.profilePic,
+          },
+        ],
+        createdAt: Timestamp.fromDate(new Date()),
+        last_refresh: Timestamp.fromDate(new Date()),
+        end: false,
+        userIds: [user.uid, toUser.uid],
       });
     }
 
@@ -213,7 +234,6 @@ export default function Md() {
       createdAt: Timestamp.fromDate(new Date()),
       last_refresh: Timestamp.fromDate(new Date()),
       end: false,
-      responded: false,
       userIds: [user.uid, toUser.uid],
     });
   };
