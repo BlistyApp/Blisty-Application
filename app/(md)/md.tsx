@@ -158,9 +158,11 @@ export default function Md() {
         console.log("room no creado");
         await createNewRoom();
       } else {
-        await updateDoc(roomRef, {
-          responded: false,
-        });
+        if (toUser.uid === "blisty") {
+          await updateDoc(roomRef, {
+            responded: false,
+          });
+        }
       }
 
       const messagesRef = collection(roomRef, "messages");
