@@ -160,16 +160,29 @@ export default function Md() {
       }
 
       const messagesRef = collection(roomRef, "messages");
-      const newMessage = await addDoc(messagesRef, {
-        type: "contact",
-        text: meesageInput,
-        createdAt: Timestamp.fromDate(new Date()),
-        from: user.uid,
-        to: toUser.uid,
-        responded: false,
-      });
-      console.log(newMessage);
-      console.log("Document written with ID: ", newMessage.id);
+
+      if (toUser.uid === "blisty") {
+        const newMessage = await addDoc(messagesRef, {
+          type: "contact",
+          text: meesageInput,
+          createdAt: Timestamp.fromDate(new Date()),
+          from: user.uid,
+          to: toUser.uid,
+          responded: false,
+        });
+        console.log(newMessage);
+        console.log("Document written with ID: ", newMessage.id);
+      } else {
+        const newMessage = await addDoc(messagesRef, {
+          type: "contact",
+          text: meesageInput,
+          createdAt: Timestamp.fromDate(new Date()),
+          from: user.uid,
+          to: toUser.uid,
+        });
+        console.log(newMessage);
+        console.log("Document written with ID: ", newMessage.id);
+      }
     } catch (e) {
       console.error(e);
       if (e instanceof BlistyError) {
