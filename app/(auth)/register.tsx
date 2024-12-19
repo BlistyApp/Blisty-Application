@@ -87,6 +87,12 @@ export default function Register() {
   const onSubmit = async (data: RegisterType) => {
     setLoading(true);
     try {
+      if(data.role === "patient") {
+        await register(data);
+        setLoading(false);
+        return;
+      }
+
       const { experience, ...rest } = data;
       const experience_string = `${data.experience.mode} ${data.experience.years} años`;
       await register({ ...rest, experience_string });

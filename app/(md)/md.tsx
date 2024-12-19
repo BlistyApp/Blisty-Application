@@ -228,15 +228,6 @@ export default function Md() {
         userIds: [user.uid, toUser.uid],
       });
     }
-
-    await setDoc(doc(db, "rooms", roomId), {
-      roomId,
-      users: users,
-      createdAt: Timestamp.fromDate(new Date()),
-      last_refresh: Timestamp.fromDate(new Date()),
-      end: false,
-      userIds: [user.uid, toUser.uid],
-    });
   };
 
   return (

@@ -101,7 +101,7 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
           setUser({
             name: data?.name as string,
             email: user?.email as string,
-            profilePic: user?.profilePic as string,
+            profilePic: data?.profilePic as string,
             uid: user?.uid as string,
             role: data.role as "psychologist" | "patient",
             tuition_number: data.tuition_number,
@@ -117,7 +117,7 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
           setUser({
             name: data?.name as string,
             email: user?.email as string,
-            profilePic: user?.profilePic as string,
+            profilePic: data?.profilePic as string,
             uid: user?.uid as string,
             role: data.role as "psychologist" | "patient",
             birth_day: data.birth_day,

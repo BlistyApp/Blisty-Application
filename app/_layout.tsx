@@ -27,11 +27,9 @@ export default function RootLayout() {
   const { setError, error } = useErrorStore((state) => state);
   const { appKey } = useAppKeyStore((state) => state);
 
-  
   useEffect(() => {
     setLoading(true);
   }, [appKey]);
-
 
   const onAuthStateChanged = (user: any) => {
     if (user) {
@@ -47,7 +45,6 @@ export default function RootLayout() {
       clearUser();
     }
     setLoading(false);
-
   };
 
   useEffect(() => {
@@ -87,7 +84,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     const getUserInf = async () => {
-
       if (fbAuth && user) {
         try {
           if (navigationState?.key) {
@@ -122,10 +118,10 @@ export default function RootLayout() {
         }
       }
     };
-    if(initializing === false && loading === false) getUserInf();
+    if (initializing === false && loading === false) getUserInf();
   }, [navigationState?.key, segments, user, initializing, loading]);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     console.log(loading, initializing);
   }, [loading, initializing]); */
 
