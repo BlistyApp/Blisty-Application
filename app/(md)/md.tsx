@@ -166,14 +166,8 @@ export default function Md() {
         createdAt: Timestamp.fromDate(new Date()),
         from: user.uid,
         to: toUser.uid,
+        responded: false,
       });
-
-      if (toUser.uid === "blisty" && room.exists()) {
-        await updateDoc(roomRef, {
-          responded: false,
-        });
-      }
-
       console.log(newMessage);
       console.log("Document written with ID: ", newMessage.id);
     } catch (e) {
@@ -196,38 +190,26 @@ export default function Md() {
       profilePic: user.profilePic,
     });
     if (toUser.uid === "blisty") {
-      await setDoc(doc(db, "rooms", roomId), {
-        roomId,
-        users: [
-          ...users,
-          {
-            uid: "blisty",
-            name: "Blisty",
-          },
-        ],
-        createdAt: Timestamp.fromDate(new Date()),
-        last_refresh: Timestamp.fromDate(new Date()),
-        end: false,
-        responded: false,
-        userIds: [user.uid, toUser.uid],
+      users.push({
+        uid: "blisty",
+        name: "Blisty",
       });
     } else {
-      await setDoc(doc(db, "rooms", roomId), {
-        roomId,
-        users: [
-          ...users,
-          {
-            uid: toUser.uid,
-            name: toUser.name,
-            profilePic: toUser.profilePic,
-          },
-        ],
-        createdAt: Timestamp.fromDate(new Date()),
-        last_refresh: Timestamp.fromDate(new Date()),
-        end: false,
-        userIds: [user.uid, toUser.uid],
+      users.push({
+        uid: toUser.uid,
+        name: toUser.name,
+        profilePic: toUser.profilePic,
       });
     }
+
+    await setDoc(doc(db, "rooms", roomId), {
+      roomId,
+      users: users,
+      createdAt: Timestamp.fromDate(new Date()),
+      last_refresh: Timestamp.fromDate(new Date()),
+      end: false,
+      userIds: [user.uid, toUser.uid],
+    });
   };
 
   return (
