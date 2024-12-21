@@ -42,13 +42,13 @@ export interface User {
   birth_day?: Timestamp;
   phone?: string;
   email: string;
-  profilePic: string;
+  profile_pic: string;
   uid: string;
   role?: "psychologist" | "patient";
-  tuition_number?: string;
+  tuition_number?: number;
   mTags?: string[];
   tags?: string[];
   experience?: string;
   description?: string;
-  available_mode?: string;  
+  available_mode?: string;
 }

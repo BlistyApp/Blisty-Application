@@ -76,19 +76,18 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
         const data = userSnap.data();
         //console.log("DATA USER");
         //console.log(data);
-        if (typeof data.tuition_number === "string") {
+        if (typeof data.tuition_number === "number") {
           console.log("PSYCHOLOGIST LOGED IN");
 
           const tagsRef = query(
             collection(db, "tags"),
-            where("tag", "in", data.tags)
+            where("id", "in", data.tags)
           );
           const tagsSnap = await getDocs(tagsRef);
           const tagsData = tagsSnap.docs.map((doc) => doc.data().label);
-
           const mTagsRef = query(
             collection(db, "master-tags"),
-            where("tag", "in", data.mTags)
+            where("id", "in", data.mTags)
           );
           const mTagsSnap = await getDocs(mTagsRef);
           const mTagsData = mTagsSnap.docs.map((doc) => doc.data().label);
@@ -97,11 +96,12 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
           //console.log(tagsData);
           //console.log("MTAGS DATA");
           //console.log(mTagsData);
+          console.log(data);
 
           setUser({
             name: data?.name as string,
             email: user?.email as string,
-            profilePic: data?.profilePic as string,
+            profile_pic: data?.profile_pic as string,
             uid: user?.uid as string,
             role: data.role as "psychologist" | "patient",
             tuition_number: data.tuition_number,
@@ -109,7 +109,7 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
             phone: data.phone as string,
             mTags: mTagsData,
             tags: tagsData,
-            experience: data.experience_string,
+            experience: data.experience,
             description: data.description,
             available_mode: data.available_mode,
           });
@@ -117,7 +117,7 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
           setUser({
             name: data?.name as string,
             email: user?.email as string,
-            profilePic: data?.profilePic as string,
+            profile_pic: data?.profile_pic as string,
             uid: user?.uid as string,
             role: data.role as "psychologist" | "patient",
             birth_day: data.birth_day,
@@ -172,7 +172,7 @@ export const useFirebaseStore = create<FirebaseState>((set, get) => ({
         ...dataUser,
         birth_day: Timestamp.fromDate(data.birth_day),
         uid: res?.user.uid,
-        profilePic: photoURL,
+        profile_pic: photoURL,
       });
 
       console.log("DATA USER REGISTER");

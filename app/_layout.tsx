@@ -37,7 +37,7 @@ export default function RootLayout() {
       setUser({
         email: user.email,
         name: user.displayName,
-        profilePic: user.photoURL,
+        profile_pic: user.photoURL,
         uid: user.uid,
       });
     } else {

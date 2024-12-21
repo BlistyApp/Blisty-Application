@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 
 export interface ChatUser {
   name: string;
-  profilePic?: string;
+  profile_pic?: string;
   uid: string;
   lastMessage?: {
     fromUid: string;

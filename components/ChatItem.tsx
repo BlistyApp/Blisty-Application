@@ -5,7 +5,6 @@ import { ProfilePicture } from "@/components/ProfilePicture";
 import { useUserStore } from "@/stores/UserStore";
 import { formatDate } from "@/lib/utils";
 
-
 interface ChatItemProps {
   item: ChatUser;
   handlePress: (item: ChatUser) => void;
@@ -56,7 +55,7 @@ export default function ChatItem({ item, handlePress }: ChatItemProps) {
       className="w-full flex flex-row justify-between gap-3 mb-2 pb-2 px-2 border-b border-b-neutral-200"
     >
       <View>
-        <ProfilePicture name={item.uid} uri={item.profilePic} />
+        <ProfilePicture name={item.uid} uri={item.profile_pic} />
       </View>
       <View className="flex-1 gap-1">
         <View className="flex-row justify-between">

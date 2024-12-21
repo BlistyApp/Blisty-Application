@@ -63,23 +63,20 @@ export default function ContactInf() {
           >
             <LeftIcon size={20} color={"rgb(62 0 156)"} />
           </Pressable>
-          <AccountDisplay profilePic={info?.profilePic} />
+          <AccountDisplay profilePic={info?.profile_pic} />
 
           <View className="flex-1 justify-start w-full pl-10 px-10">
             <FieldAccount
               label="Nombre"
               value={info ? info.name || "Usuario" : "---"}
             />
-            <FieldAccount
-              label="Correo"
-              value={info ? info.email : "---"}
-            />
+            <FieldAccount label="Correo" value={info ? info.email : "---"} />
             {info.role === "psychologist" && (
               <>
                 <FieldAccount
                   label="Número de colegiatura"
                   value={
-                    info.tuition_number ? info.tuition_number : "---"
+                    info.tuition_number ? info.tuition_number.toString() : "---"
                   }
                 />
                 <FieldAccount
@@ -88,9 +85,7 @@ export default function ContactInf() {
                 />
                 <FieldAccount
                   label="Disponibilidad"
-                  value={
-                    info.available_mode ? info.available_mode : "---"
-                  }
+                  value={info.available_mode ? info.available_mode : "---"}
                 />
                 <FieldAccount
                   label="Especializaciónes primarias"

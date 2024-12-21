@@ -7,7 +7,7 @@ export interface RegisterPatient {
   phone: string;
   email: string;
   password: string;
-  profilePic: string;
+  profile_pic: string;
   terms: boolean;
 }
 
