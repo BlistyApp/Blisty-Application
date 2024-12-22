@@ -40,6 +40,7 @@ export default function KeyboardViewCustom({
         bounces={false}
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}
+        keyboardShouldPersistTaps="handled"
       />
     </KeyboardAvoidingView>
   );

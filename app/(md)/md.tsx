@@ -27,8 +27,7 @@ import {
   query,
   orderBy,
   onSnapshot,
-  getDoc,
-  updateDoc,
+  getDoc
 } from "firebase/firestore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
@@ -70,7 +69,7 @@ export default function Md() {
       if (!user) {
         throw new BlistyError(
           "No se encontró el usuario dirigido",
-          "error-user",
+          "error-user"
         );
       }
 
@@ -87,7 +86,7 @@ export default function Md() {
       const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
         setLoading(false);
         const allMessages = querySnapshot.docs.map((doc) =>
-          doc.data(),
+          doc.data()
         ) as MessageType[];
         console.log(allMessages);
         setMessages([...allMessages]);
@@ -117,7 +116,7 @@ export default function Md() {
       await setDoc(
         roomRef,
         { last_refresh: Timestamp.fromDate(new Date()) },
-        { merge: true },
+        { merge: true }
       );
 
       const messagesRef = collection(roomRef, "messages");
@@ -240,7 +239,7 @@ export default function Md() {
       scrollEnabled={false}
       keyboardVerticalOffset={91}
     >
-      <View style={{ height: height * 0.87 }} className="bg-neutral-200">
+      <View className="flex-1 bg-neutral-200">
         <StatusBar barStyle="light-content" />
         <MdHeder router={router} onRefresh={onRefresh} />
         <View className="h-2 bg-primary border-b border-neutral-300" />
@@ -293,12 +292,7 @@ export default function Md() {
                   multiline={true}
                   placeholder="Type a message"
                 />
-                <Pressable
-                  onPress={() => {
-                    onSend();
-                  }}
-                  className="self-center mr-2"
-                >
+                <Pressable onPress={onSend} className="self-center mr-2">
                   <SendIcon size={38} color="#3e009c" />
                 </Pressable>
               </View>

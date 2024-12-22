@@ -70,3 +70,11 @@ export function ReturnIcon({ ...props }) {
 export function CancelIcon({ ...props }) {
   return <MaterialCommunityIcons name="close-circle" {...props} />;
 }
+
+export function EyeIcon({ ...props }) {
+  return <MaterialCommunityIcons name="eye" {...props} />;
+}
+
+export function EyeOffIcon({ ...props }) {
+  return <MaterialCommunityIcons name="eye-off" {...props} />;
+}

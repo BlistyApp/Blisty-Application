@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import DateTimePicker, {
   AndroidNativeProps,
   DateTimePickerEvent,
@@ -35,7 +35,7 @@ export function DateInput({
     onChange(currentDate);
   };
   return (
-    <>
+    <View>
       <Pressable
         style={({ pressed }) => [
           styles.button,
@@ -61,7 +61,7 @@ export function DateInput({
           negativeButton={{ label: "Cancelar", textColor: "#3e009c" }}
         />
       )}
-    </>
+    </View>
   );
 }
 

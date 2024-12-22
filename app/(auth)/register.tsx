@@ -1,9 +1,11 @@
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Pressable,
   StatusBar,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Label } from "@/components/Label";
@@ -28,6 +30,7 @@ import { MultiSelection } from "@/components/MultiSelection";
 import BlistyError from "@/lib/blistyError";
 import { getTags } from "@/lib/gets";
 import React from "react";
+import { EyeIcon, EyeOffIcon } from "@/components/icons/Icons";
 
 const StyledView = styled(View);
 
@@ -55,6 +58,7 @@ export default function Register() {
     },
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [openTerms, setOpenTerms] = useState<boolean>(false);
   const [mTags, setMTags] = useState<{ label: string; value: string }[]>([]);
   const [tags, setTags] = useState<{ label: string; value: string }[]>([]);
@@ -206,7 +210,9 @@ export default function Register() {
                         />
                       )}
                       name="tuition_number"
-                      rules={{ required: "Digite su número de colegiatura" }}
+                      rules={{
+                        required: "Digite su número de colegiatura",
+                      }}
                     />
                     {"tuition_number" in errors && (
                       <Text className="text-red-500 text-sm">
@@ -322,21 +328,37 @@ export default function Register() {
                   <Label className={`${errors.password && "text-red-500"}`}>
                     Contraseña
                   </Label>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        placeholder="*********"
-                        secureTextEntry={true}
-                        onBlur={onBlur}
-                        onChangeText={(value: any) => onChange(value)}
-                        value={value}
-                        className={`${errors.password && "border-red-500"}`}
-                      />
-                    )}
-                    name="password"
-                    rules={{ required: "Contraseña es necesaria" }}
-                  />
+                  <View className="flex flex-row justify-between items-center border-2 rounded-lg">
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Input
+                          placeholder="*********"
+                          secureTextEntry={!showPassword}
+                          onBlur={onBlur}
+                          onChangeText={(value: any) => onChange(value)}
+                          value={value}
+                          className={`border-0 flex-1 ${
+                            errors.password && "border-red-500"
+                          }`}
+                        />
+                      )}
+                      name="password"
+                      rules={{ required: "Contraseña es necesaria" }}
+                    />
+                    <Pressable
+                      onPress={() => {
+                        setShowPassword(!showPassword);
+                      }}
+                      style={{ marginHorizontal: wp("3%") }}
+                    >
+                      {showPassword ? (
+                        <EyeIcon size={24} color="#3e009c" />
+                      ) : (
+                        <EyeOffIcon size={24} color="#ccc" />
+                      )}
+                    </Pressable>
+                  </View>
                   {errors.password && (
                     <Text className="text-red-500 text-sm">
                       {errors.password.message}
@@ -454,7 +476,10 @@ export default function Register() {
                             <DropDownList
                               data={[
                                 { label: "Mas de", value: "Mas de" },
-                                { label: "Exactamente", value: "Exactamente" },
+                                {
+                                  label: "Exactamente",
+                                  value: "Exactamente",
+                                },
                                 { label: "Menos de", value: "Menos de" },
                               ]}
                               onChange={onChange}
@@ -476,7 +501,10 @@ export default function Register() {
                               placeholder="Años"
                               keyboardType={"number-pad"}
                               onChangeText={(value: any) => onChange(value)}
-                              style={{ width: wp("40%"), marginLeft: wp("3%") }}
+                              style={{
+                                width: wp("40%"),
+                                marginLeft: wp("3%"),
+                              }}
                               value={value}
                               className={`${
                                 errors.experience?.years && "border-red-500"

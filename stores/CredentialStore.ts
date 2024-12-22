@@ -22,7 +22,7 @@ export const useCredentialStore = create<CredentialState>((set, get) => ({
   },
   getCredentials: async () => {
     const res = (await (
-      await fetch("https://xenial-sherrie-blisty-65d38a90.koyeb.app/creds")
+      await fetch("http://192.168.18.7:3000/creds")
     ).json()) as Credentials;
     set((_state) => ({ credentials: res }));
   },

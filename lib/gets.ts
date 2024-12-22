@@ -61,7 +61,7 @@ export const getUsersData = async (uids: string[]) => {
         profile_pic: userData?.profilePic as string,
         uid: userData?.uid as string,
         role: userData.role as "psychologist" | "patient",
-        tuition_number: userData.tuition_number,
+        tuition_number: Number(userData.tuition_number),
         birth_day: userData.birth_day,
         phone: userData.phone as string,
         mTags: mTagsData,
@@ -95,7 +95,7 @@ export const getTags = async () => {
   await getDocs(tagsQuery).then((querySnapshot) => {
     querySnapshot.docs.map((doc) => {
       data.tags.push({
-        id: doc.data().tag,
+        id: doc.data().id,
         label: doc.data().label,
       });
     });
@@ -106,7 +106,7 @@ export const getTags = async () => {
   await getDocs(mTagsQuery).then((querySnapshot) => {
     querySnapshot.docs.map((doc) => {
       data.mTags.push({
-        id: doc.data().tag,
+        id: doc.data().id,
         label: doc.data().label,
       });
     });
