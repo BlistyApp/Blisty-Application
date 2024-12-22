@@ -70,7 +70,7 @@ export default function Md() {
       if (!user) {
         throw new BlistyError(
           "No se encontró el usuario dirigido",
-          "error-user"
+          "error-user",
         );
       }
 
@@ -87,7 +87,7 @@ export default function Md() {
       const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
         setLoading(false);
         const allMessages = querySnapshot.docs.map((doc) =>
-          doc.data()
+          doc.data(),
         ) as MessageType[];
         console.log(allMessages);
         setMessages([...allMessages]);
@@ -117,7 +117,7 @@ export default function Md() {
       await setDoc(
         roomRef,
         { last_refresh: Timestamp.fromDate(new Date()) },
-        { merge: true }
+        { merge: true },
       );
 
       const messagesRef = collection(roomRef, "messages");
