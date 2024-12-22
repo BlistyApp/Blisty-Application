@@ -39,7 +39,7 @@ export default function Account() {
       <Screen>
         <View className="bg-white flex-1 items-center">
           <StatusBar barStyle={"light-content"} />
-          <AccountDisplay profilePic={user?.profilePic} />
+          <AccountDisplay profilePic={user?.profile_pic} />
 
           <View className="flex-1 justify-start w-full px-10">
             <View className="w-full flex items-center">
@@ -78,7 +78,9 @@ export default function Account() {
                 <FieldAccount
                   label="Número de colegiatura"
                   value={
-                    user.tuition_number ? user.tuition_number : "not found"
+                    user.tuition_number
+                      ? user.tuition_number.toString()
+                      : "not found"
                   }
                 />
                 <FieldAccount
@@ -118,7 +120,7 @@ export default function Account() {
               label="Fecha de nacimiento"
               value={
                 user?.birth_day
-                  ? `${formatFullDate(new Date(user.birth_day.seconds * 1000))}`
+                  ? `${formatFullDate(user.birth_day.toDate())}`
                   : "not found"
               }
             />

@@ -40,7 +40,7 @@ export default function SuggestionInf() {
   return (
     <Screen>
       <View className="bg-white flex-1 items-center">
-        <AccountDisplay profilePic={info?.profilePic} />
+        <AccountDisplay profilePic={info?.profile_pic} />
 
         <View className="flex-1 justify-start w-full pl-10 px-10">
           <FieldAccount
@@ -53,7 +53,9 @@ export default function SuggestionInf() {
           />
           <FieldAccount
             label="Número de colegiatura"
-            value={info.tuition_number ? info.tuition_number : "not found"}
+            value={
+              info.tuition_number ? info.tuition_number.toString() : "not found"
+            }
           />
           <FieldAccount
             label="Fecha de nacimiento"

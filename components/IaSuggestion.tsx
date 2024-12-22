@@ -16,7 +16,7 @@ export function IaSuggestion({ psyco }: { psyco: User }) {
     >
       <View className="flex-row items-center gap-x-4 py-2">
         <View>
-          <ProfilePicture name={psyco?.uid} uri={psyco?.profilePic} />
+          <ProfilePicture name={psyco?.uid} uri={psyco?.profile_pic} />
         </View>
         <View className="flex w-full">
           <Text className="font-bold text-lg text-black">{psyco?.name}</Text>

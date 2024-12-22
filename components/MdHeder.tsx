@@ -6,7 +6,10 @@ import { useMdStore } from "@/stores/MdStore";
 import { ProfilePicture } from "./ProfilePicture";
 import { useInfoAccountStore } from "@/stores/InfoAccountStore";
 
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from "react-native-responsive-screen";
 
 interface MdHederProps {
   router: Router;
@@ -43,7 +46,10 @@ export default function MdHeder({ router, onRefresh }: MdHederProps) {
             >
               <View className="flex-row items-center gap-x-4">
                 <View>
-                  <ProfilePicture name={toUser?.uid} uri={toUser?.profilePic} />
+                  <ProfilePicture
+                    name={toUser?.uid}
+                    uri={toUser?.profile_pic}
+                  />
                 </View>
                 <Text className="font-bold text-xl text-white">
                   {toUser?.name}
@@ -55,10 +61,21 @@ export default function MdHeder({ router, onRefresh }: MdHederProps) {
                 onPress={() => {
                   onRefresh();
                 }}
-                style={{width: wp("25%"), marginRight: wp("8%"), backgroundColor: "rgba(0, 0, 0, 0.5)", paddingVertical: hp("1%"), paddingHorizontal: wp("3%")}}
+                style={{
+                  width: wp("25%"),
+                  marginRight: wp("8%"),
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  paddingVertical: hp("1%"),
+                  paddingHorizontal: wp("3%"),
+                }}
                 className="self-center rounded-full items-center"
               >
-                <Text style={{fontSize: hp("1.5%")}} className="text-white text-center font-medium">Comenzar de nuevo</Text>
+                <Text
+                  style={{ fontSize: hp("1.5%") }}
+                  className="text-white text-center font-medium"
+                >
+                  Comenzar de nuevo
+                </Text>
               </Pressable>
             )}
           </View>

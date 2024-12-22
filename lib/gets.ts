@@ -14,7 +14,7 @@ export const getPsycos = async (uids: string[]) => {
       data.push({
         name: doc.data().name,
         uid: doc.data().uid,
-        profilePic: doc.data().profilePic,
+        profile_pic: doc.data().profile_pic,
         tuition_number: doc.data().tuition_number,
       } as User);
     });
@@ -28,7 +28,7 @@ export const getUsersData = async (uids: string[]) => {
   const usersRef = collection(db, "users");
   const usersQuery = query(usersRef, where("uid", "in", uids));
   let data = [] as User[];
-  
+
   const querySnapshot = await getDocs(usersQuery);
 
   for (const doc of querySnapshot.docs) {
@@ -58,7 +58,7 @@ export const getUsersData = async (uids: string[]) => {
       data.push({
         name: userData?.name as string,
         email: userData?.email as string,
-        profilePic: userData?.profilePic as string,
+        profile_pic: userData?.profilePic as string,
         uid: userData?.uid as string,
         role: userData.role as "psychologist" | "patient",
         tuition_number: userData.tuition_number,
@@ -74,7 +74,7 @@ export const getUsersData = async (uids: string[]) => {
       data.push({
         name: userData?.name as string,
         email: userData?.email as string,
-        profilePic: userData?.profilePic as string,
+        profile_pic: userData?.profilePic as string,
         uid: userData?.uid as string,
         role: userData.role as "psychologist" | "patient",
         birth_day: userData.birth_day,
@@ -95,7 +95,7 @@ export const getTags = async () => {
   await getDocs(tagsQuery).then((querySnapshot) => {
     querySnapshot.docs.map((doc) => {
       data.tags.push({
-        tag: doc.data().tag,
+        id: doc.data().tag,
         label: doc.data().label,
       });
     });
@@ -106,7 +106,7 @@ export const getTags = async () => {
   await getDocs(mTagsQuery).then((querySnapshot) => {
     querySnapshot.docs.map((doc) => {
       data.mTags.push({
-        tag: doc.data().tag,
+        id: doc.data().tag,
         label: doc.data().label,
       });
     });

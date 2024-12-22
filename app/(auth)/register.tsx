@@ -65,8 +65,8 @@ export default function Register() {
       try {
         const { tags, mTags } = await getTags();
         console.log({ tags, mTags });
-        setMTags(mTags.map((mtag) => ({ label: mtag.label, value: mtag.tag })));
-        setTags(tags.map((tag) => ({ label: tag.label, value: tag.tag })));
+        setMTags(mTags.map((mtag) => ({ label: mtag.label, value: mtag.id })));
+        setTags(tags.map((tag) => ({ label: tag.label, value: tag.id })));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -87,7 +87,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterType) => {
     setLoading(true);
     try {
-      if(data.role === "patient") {
+      if (data.role === "patient") {
         await register(data);
         setLoading(false);
         return;

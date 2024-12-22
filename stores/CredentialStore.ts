@@ -22,7 +22,7 @@ export const useCredentialStore = create<CredentialState>((set, get) => ({
   },
   getCredentials: async () => {
     const res = (await (
-      await fetch("https://blisty-backend.vercel.app/creds")
+      await fetch("https://xenial-sherrie-blisty-65d38a90.koyeb.app/creds")
     ).json()) as Credentials;
     set((_state) => ({ credentials: res }));
   },

@@ -1,4 +1,4 @@
 export interface TagType {
-  tag: string;
+  id: string;
   label: string;
 }

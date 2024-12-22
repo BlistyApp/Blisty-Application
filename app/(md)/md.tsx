@@ -200,7 +200,7 @@ export default function Md() {
     users.push({
       uid: user.uid,
       name: user.name,
-      profilePic: user.profilePic,
+      profile_pic: user.profile_pic,
     });
     if (toUser.uid === "blisty") {
       users.push({
@@ -211,10 +211,17 @@ export default function Md() {
       users.push({
         uid: toUser.uid,
         name: toUser.name,
-        profilePic: toUser.profilePic,
+        profile_pic: toUser.profile_pic,
       });
     }
-
+    console.log({
+      roomId,
+      users: users,
+      createdAt: Timestamp.fromDate(new Date()),
+      last_refresh: Timestamp.fromDate(new Date()),
+      end: false,
+      userIds: [user.uid, toUser.uid],
+    });
     await setDoc(doc(db, "rooms", roomId), {
       roomId,
       users: users,
@@ -222,6 +229,8 @@ export default function Md() {
       last_refresh: Timestamp.fromDate(new Date()),
       end: false,
       userIds: [user.uid, toUser.uid],
+    }).catch((e) => {
+      console.error(e);
     });
   };
 

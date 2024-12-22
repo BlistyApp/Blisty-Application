@@ -110,7 +110,7 @@ export default function Chats() {
                   chatsData.push({
                     name: to.name,
                     uid: to.uid,
-                    profilePic: to.profilePic,
+                    profile_pic: to.profilePic,
                     lastMessage: {
                       fromUid: lastMessage.from,
                       text: lastMessage.text,
