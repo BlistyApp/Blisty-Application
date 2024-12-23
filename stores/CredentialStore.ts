@@ -6,7 +6,7 @@ import { Credentials, CredentialState } from "./Types";
 const decrypt = async (encrypted: string) => {
   const bytes = CryptoJS.AES.decrypt(
     encrypted,
-    process.env.EXPO_PUBLIC_SECRET_KEY ?? ""
+    process.env.EXPO_PUBLIC_SECRET_KEY ?? "",
   );
   return bytes.toString(CryptoJS.enc.Utf8);
 };
@@ -22,7 +22,7 @@ export const useCredentialStore = create<CredentialState>((set, get) => ({
   },
   getCredentials: async () => {
     const res = (await (
-      await fetch("http://192.168.18.7:3000/creds")
+      await fetch("https://xenial-sherrie-blisty-65d38a90.koyeb.app/creds")
     ).json()) as Credentials;
     set((_state) => ({ credentials: res }));
   },
@@ -31,10 +31,10 @@ export const useCredentialStore = create<CredentialState>((set, get) => ({
     const decryptedAuthDomain = await decrypt(get().credentials.authDomain);
     const decryptedProjectId = await decrypt(get().credentials.projectId);
     const decryptedStorageBucket = await decrypt(
-      get().credentials.storageBucket
+      get().credentials.storageBucket,
     );
     const decryptedMessagingSenderId = await decrypt(
-      get().credentials.messagingSenderId
+      get().credentials.messagingSenderId,
     );
     const decryptedAppId = await decrypt(get().credentials.appId);
     set((_state) => ({
