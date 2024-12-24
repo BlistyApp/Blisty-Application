@@ -61,6 +61,20 @@ export default function Md() {
     scrollToEnd();
   };
 
+  const aiChatPetition = async (userId:string, roomId :string) => {
+    const response = await fetch("https://blisty-backend.vercel.app/ai-chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId,
+        roomId: roomId,
+      }),
+    });
+    return response;
+  }
+
   useEffect(() => {
     try {
       if (!db) {
@@ -99,6 +113,9 @@ export default function Md() {
         setMessages([...allMessages]);
       });
 
+      if (toUser.uid === "blisty") {
+        aiChatPetition(user.uid, roomId);
+      }
       return unsubscribe;
     } catch (e) {
       console.error(e);
@@ -133,7 +150,9 @@ export default function Md() {
         createdAt: Timestamp.fromDate(new Date()),
         from: user.uid,
         to: toUser.uid,
+        responded: true,
       });
+      await aiChatPetition(user.uid, roomId);
       //console.log(new_refresh);
     } catch (e) {
       console.error(e);
@@ -176,8 +195,10 @@ export default function Md() {
           to: toUser.uid,
           responded: false,
         });
+        const response = await aiChatPetition(user.uid, roomId);
         console.log(newMessage);
         console.log("Document written with ID: ", newMessage.id);
+        console.log("Response aichat/ :", response);
       } else {
         const newMessage = await addDoc(messagesRef, {
           type: "contact",
