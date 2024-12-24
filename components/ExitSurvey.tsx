@@ -11,10 +11,9 @@ import { SwipeRating } from "@/components/SwipeRating";
 import { Input } from "./Input";
 import { useRef, useState } from "react";
 import { CancelIcon } from "./icons/Icons";
-import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { useUserStore } from "@/stores/UserStore";
-import { set } from "react-hook-form";
 const { width, height } = Dimensions.get("window");
 
 export function ExitSurvey({
@@ -86,7 +85,11 @@ export function ExitSurvey({
             </View>
             <SwipeRating maxRating={5} onRatingChange={handleRatingChange} />
             <View
-              style={{ maxHeight: height * 0.1, width: "95%" }}
+              style={{
+                maxHeight: height * 0.1,
+                minHeight: height * 0.05,
+                width: "95%",
+              }}
               className="flex-1 mx-3 mt-2"
             >
               <Input

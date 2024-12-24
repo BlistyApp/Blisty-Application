@@ -1,5 +1,5 @@
 import { TabBarIcon, TabBarLabel } from "@/components/icons/Icons";
-import { Tabs } from "expo-router";
+import { Tabs, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useUserStore } from "@/stores/UserStore";
 import { Loading } from "@/components/Loading";
@@ -10,7 +10,8 @@ export default function TabsLayout() {
   const [loading, setLoading] = useState(true);
   const { user } = useUserStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
+  const segments = useSegments();
+  
   useEffect(() => {
     if (user?.role) {
       setLoading(false);
@@ -21,7 +22,7 @@ export default function TabsLayout() {
 
   useEffect(() => {
     const backAction = () => {
-      if (user?.uid !== null) {
+      if (user?.uid !== null && segments[1] === "chats") {
         setIsVisible(true);
         return true;
       }
@@ -33,7 +34,7 @@ export default function TabsLayout() {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, [segments]);
 
   if (loading) return <Loading />;
 
