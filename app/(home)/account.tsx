@@ -49,10 +49,7 @@ export default function Account() {
               <Text className="text-lg text-slate-600 -mt-3">Nombre</Text>
             </View>
 
-            <FieldAccount
-              label="Correo"
-              value={user ? user.email : "not found"}
-            />
+            <FieldAccount label="Correo" value={user ? user.email : "---"} />
             <View className="w-full flex-row">
               <View className="w-1/2">
                 <FieldAccount
@@ -69,7 +66,7 @@ export default function Account() {
               <View className="w-1/2">
                 <FieldAccount
                   label="Teléfono"
-                  value={user?.phone ? user.phone : "not found"}
+                  value={user?.phone ? user.phone : "---"}
                 />
               </View>
             </View>
@@ -78,27 +75,23 @@ export default function Account() {
                 <FieldAccount
                   label="Número de colegiatura"
                   value={
-                    user.tuition_number
-                      ? user.tuition_number.toString()
-                      : "not found"
+                    user.tuition_number ? user.tuition_number.toString() : "---"
                   }
                 />
                 <FieldAccount
                   label="Experiencia"
-                  value={user.experience ? user.experience : "not found"}
+                  value={user.experience ? user.experience : "---"}
                 />
                 <FieldAccount
                   label="Disponibilidad"
-                  value={
-                    user.available_mode ? user.available_mode : "not found"
-                  }
+                  value={user.available_mode ? user.available_mode : "---"}
                 />
                 <FieldAccount
                   label="Especializaciónes primarias"
                   value={
                     user.mTags
                       ? user.mTags?.map((tag) => `  - ${tag}`).join("\n")
-                      : "not found"
+                      : "---"
                   }
                 />
                 <FieldAccount
@@ -106,12 +99,12 @@ export default function Account() {
                   value={
                     user.tags
                       ? user.tags?.map((tag) => `  - ${tag}`).join("\n")
-                      : "not found"
+                      : "---"
                   }
                 />
                 <FieldAccount
                   label="Descripción"
-                  value={user.description ? user.description : "not found"}
+                  value={user.description ? user.description : "---"}
                 />
               </>
             )}
@@ -121,7 +114,7 @@ export default function Account() {
               value={
                 user?.birth_day
                   ? `${formatFullDate(user.birth_day.toDate())}`
-                  : "not found"
+                  : "---"
               }
             />
           </View>

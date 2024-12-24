@@ -35,17 +35,17 @@ export const getUsersData = async (uids: string[]) => {
     const userData = doc.data();
     console.log("DATA USER");
     console.log(userData);
-    if (typeof userData.tuition_number === "string") {
+    if (typeof userData.tuition_number === "number") {
       const tagsRef = query(
         collection(db, "tags"),
-        where("tag", "in", userData.tags)
+        where("id", "in", userData.tags)
       );
       const tagsSnap = await getDocs(tagsRef);
       const tagsData = tagsSnap.docs.map((doc) => doc.data().label);
 
       const mTagsRef = query(
         collection(db, "master-tags"),
-        where("tag", "in", userData.mTags)
+        where("id", "in", userData.mTags)
       );
       const mTagsSnap = await getDocs(mTagsRef);
       const mTagsData = mTagsSnap.docs.map((doc) => doc.data().label);
@@ -58,7 +58,7 @@ export const getUsersData = async (uids: string[]) => {
       data.push({
         name: userData?.name as string,
         email: userData?.email as string,
-        profile_pic: userData?.profilePic as string,
+        profile_pic: userData?.profile_pic as string,
         uid: userData?.uid as string,
         role: userData.role as "psychologist" | "patient",
         tuition_number: Number(userData.tuition_number),
@@ -66,7 +66,7 @@ export const getUsersData = async (uids: string[]) => {
         phone: userData.phone as string,
         mTags: mTagsData,
         tags: tagsData,
-        experience: userData.experience_string,
+        experience: userData.experience,
         description: userData.description,
         available_mode: userData.available_mode,
       });

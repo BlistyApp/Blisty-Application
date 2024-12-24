@@ -10,6 +10,7 @@ import { formatFullDate } from "@/lib/utils";
 import { ReturnIcon, SendedIcon } from "@/components/icons/Icons";
 import { useInfoAccountStore } from "@/stores/InfoAccountStore";
 import { useMdStore } from "@/stores/MdStore";
+import KeyboardViewCustom from "@/components/KeyboardViewCustom";
 
 export default function SuggestionInf() {
   const { infoUid } = useInfoAccountStore((state) => state);
@@ -20,6 +21,8 @@ export default function SuggestionInf() {
     const fetchData = async () => {
       if (infoUid) {
         const data = await getUsersData([infoUid]);
+        console.log("In SuggestionInf");
+        console.log(data);
         if (data && data.length > 0) setInfo(data[0]);
       }
     };
@@ -38,53 +41,82 @@ export default function SuggestionInf() {
   };
 
   return (
-    <Screen>
-      <View className="bg-white flex-1 items-center">
-        <AccountDisplay profilePic={info?.profile_pic} />
+    <KeyboardViewCustom scrollEnabled={true}>
+      <Screen>
+        <View className="bg-white flex-1 items-center">
+          <AccountDisplay profilePic={info?.profile_pic} />
 
-        <View className="flex-1 justify-start w-full pl-10 px-10">
-          <FieldAccount
-            label="Nombre"
-            value={info ? info.name || "Usuario" : "not found"}
-          />
-          <FieldAccount
-            label="Correo"
-            value={info ? info.email : "not found"}
-          />
-          <FieldAccount
-            label="Número de colegiatura"
-            value={
-              info.tuition_number ? info.tuition_number.toString() : "not found"
-            }
-          />
-          <FieldAccount
-            label="Fecha de nacimiento"
-            value={
-              info.birth_day
-                ? `${formatFullDate(new Date(info.birth_day.seconds * 1000))}`
-                : "not found"
-            }
-          />
-          <Pressable
-            onPress={() => {
-              handleContact();
-            }}
-            className="bg-primary w-full flex-row justify-center rounded-lg py-2 mt-10"
-          >
-            <Text className="text-white text-lg font-bold pr-2">Contactar</Text>
-            <SendedIcon size={24} color={"white"} />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              handleBack();
-            }}
-            className="bg-slate-600 w-full flex-row justify-center rounded-lg py-2 mt-4"
-          >
-            <Text className="text-white text-lg font-bold pr-2">Volver</Text>
-            <ReturnIcon size={24} color={"white"} />
-          </Pressable>
+          <View className="flex-1 justify-start w-full pl-10 px-10 pb-6">
+            <FieldAccount
+              label="Nombre"
+              value={info ? info.name || "Usuario" : "---"}
+            />
+            <FieldAccount label="Correo" value={info ? info.email : "---"} />
+            <FieldAccount
+              label="Número de colegiatura"
+              value={
+                info.tuition_number ? info.tuition_number.toString() : "---"
+              }
+            />
+            <FieldAccount
+              label="Fecha de nacimiento"
+              value={
+                info.birth_day
+                  ? `${formatFullDate(new Date(info.birth_day.seconds * 1000))}`
+                  : "---"
+              }
+            />
+            <FieldAccount
+              label="Experiencia"
+              value={info.experience ? info.experience : "---"}
+            />
+            <FieldAccount
+              label="Disponibilidad"
+              value={info.available_mode ? info.available_mode : "---"}
+            />
+            <FieldAccount
+              label="Especializaciónes primarias"
+              value={
+                info.mTags
+                  ? info.mTags?.map((tag) => `  - ${tag}`).join("\n")
+                  : "---"
+              }
+            />
+            <FieldAccount
+              label="Especializaciónes secundarias"
+              value={
+                info.tags
+                  ? info.tags?.map((tag) => `  - ${tag}`).join("\n")
+                  : "---"
+              }
+            />
+            <FieldAccount
+              label="Descripción"
+              value={info.description ? info.description : "---"}
+            />
+            <Pressable
+              onPress={() => {
+                handleContact();
+              }}
+              className="bg-primary w-full flex-row justify-center rounded-lg py-2 mt-10"
+            >
+              <Text className="text-white text-lg font-bold pr-2">
+                Contactar
+              </Text>
+              <SendedIcon size={24} color={"white"} />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                handleBack();
+              }}
+              className="bg-slate-600 w-full flex-row justify-center rounded-lg py-2 mt-4"
+            >
+              <Text className="text-white text-lg font-bold pr-2">Volver</Text>
+              <ReturnIcon size={24} color={"white"} />
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </Screen>
+      </Screen>
+    </KeyboardViewCustom>
   );
 }
