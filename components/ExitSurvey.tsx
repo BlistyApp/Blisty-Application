@@ -106,11 +106,8 @@ export function ExitSurvey({
                 />
               </View>
               <View
-                style={{
-                  height: 0.2 * height,
-                  width: "95%",
-                }}
-                className="flex-1 mx-3 mt-2"
+                style={{ height: 120, width: "90%" }}
+                className="mx-3 mt-2"
               >
                 <Input
                   onChangeText={(value) => (messageInRef.current = value)}
