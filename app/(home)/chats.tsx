@@ -98,7 +98,7 @@ export default function Chats() {
                   setIaChat({
                     ...iaChat,
                     lastMessage: {
-                      fromUid: user.uid,
+                      fromUid: lastMessage.from,
                       text: lastMessage.text,
                       createdAt: lastMessage.createdAt,
                     },

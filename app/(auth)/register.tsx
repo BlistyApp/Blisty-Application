@@ -1,11 +1,8 @@
 import {
-  Keyboard,
-  KeyboardAvoidingView,
   Pressable,
   StatusBar,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { Label } from "@/components/Label";

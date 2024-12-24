@@ -31,7 +31,10 @@ export default function MdHeder({ router, onRefresh }: MdHederProps) {
           backgroundColor: "#3e009c",
         },
         headerLeft: () => (
-          <View className="flex-row items-center gap-4">
+          <View
+            style={{ height: hp("8%"), width: wp("100%") }}
+            className="flex-row items-center gap-4"
+          >
             <Pressable onPress={() => router.back()}>
               <LeftIcon size={22} color={"white"} />
             </Pressable>

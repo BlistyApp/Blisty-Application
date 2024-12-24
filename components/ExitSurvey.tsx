@@ -65,7 +65,7 @@ export function ExitSurvey({
       >
         {loading === null ? (
           <View
-            style={{ height: 0.4 * height, width: 0.7 * width }}
+            style={{ height: "auto", width: 0.7 * width }}
             className="bg-white rounded-2xl items-center p-4"
           >
             <Pressable

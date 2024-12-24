@@ -27,11 +27,12 @@ import {
   query,
   orderBy,
   onSnapshot,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
 import { useErrorStore } from "@/stores/ErrorsStore";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const { height } = Dimensions.get("window");
 
@@ -239,7 +240,7 @@ export default function Md() {
       scrollEnabled={false}
       keyboardVerticalOffset={91}
     >
-      <View className="flex-1 bg-neutral-200">
+      <View style={{ height: hp("92%") }} className="bg-neutral-200">
         <StatusBar barStyle="light-content" />
         <MdHeder router={router} onRefresh={onRefresh} />
         <View className="h-2 bg-primary border-b border-neutral-300" />
