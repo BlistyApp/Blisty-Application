@@ -3,7 +3,7 @@ import { Timestamp } from "firebase/firestore";
 interface UserRoomType {
   uid: string;
   name: string;
-  profilePic: string;
+  profile_pic: string;
 }
 
 export interface RoomType {

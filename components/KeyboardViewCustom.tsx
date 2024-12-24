@@ -1,4 +1,10 @@
-import { Platform, KeyboardAvoidingView, FlatList } from "react-native";
+import {
+  Platform,
+  KeyboardAvoidingView,
+  FlatList,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import React from "react";
 import { ScrollView } from "react-native";
 
@@ -6,6 +12,7 @@ const android = Platform.OS === "android";
 
 export default function KeyboardViewCustom({
   children,
+  style = { flex: 1 },
   keyboardVerticalOffset,
   scrollEnabled = false,
   backgroundColor = "white",
@@ -14,11 +21,12 @@ export default function KeyboardViewCustom({
   keyboardVerticalOffset?: number;
   scrollEnabled?: boolean;
   backgroundColor?: string;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
     <KeyboardAvoidingView
       behavior={android ? "height" : "padding"}
-      style={{ flex: 1, backgroundColor }}
+      style={[ style, { backgroundColor }]}
       keyboardVerticalOffset={
         keyboardVerticalOffset ? keyboardVerticalOffset : 0
       }

@@ -86,9 +86,15 @@ export default function Md() {
 
       const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
         setLoading(false);
-        const allMessages = querySnapshot.docs.map((doc) =>
-          doc.data()
-        ) as MessageType[];
+        const allMessages = querySnapshot.docs.map((doc) => {
+          const message_data = doc.data();
+          /*
+            if ("responded" in message_data && message_data.responded === false) {
+              await fetch("https://api.blisty.com/ia")
+            }
+          */
+          return message_data;
+        }) as MessageType[];
         console.log(allMessages);
         setMessages([...allMessages]);
       });

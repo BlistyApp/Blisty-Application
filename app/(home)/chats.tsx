@@ -110,7 +110,7 @@ export default function Chats() {
                   chatsData.push({
                     name: to.name,
                     uid: to.uid,
-                    profile_pic: to.profilePic,
+                    profile_pic: to.profile_pic,
                     lastMessage: {
                       fromUid: lastMessage.from,
                       text: lastMessage.text,
@@ -201,7 +201,8 @@ export default function Chats() {
             <View className="h-2" />
             <ChatItem
               item={
-                iaChat.lastMessage
+                iaChat.lastMessage &&
+                iaChat.lastMessage.text !== "Comenzamos de nuevo!"
                   ? iaChat
                   : {
                       ...iaChat,
