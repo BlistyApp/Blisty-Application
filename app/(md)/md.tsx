@@ -61,19 +61,24 @@ export default function Md() {
     scrollToEnd();
   };
 
-  const aiChatPetition = async (userId:string, roomId :string) => {
-    const response = await fetch("https://blisty-backend.vercel.app/ai-chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userId,
-        roomId: roomId,
-      }),
-    });
-    return response;
-  }
+  const aiChatPetition = async (userId: string, roomId: string) => {
+    try {
+      const response = await fetch(
+        "https://blisty-backend.vercel.app/ai-chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            roomId: roomId,
+          }),
+        }
+      );
+      return response;
+    } catch {}
+  };
 
   useEffect(() => {
     try {
@@ -102,20 +107,15 @@ export default function Md() {
         setLoading(false);
         const allMessages = querySnapshot.docs.map((doc) => {
           const message_data = doc.data();
-          /*
-            if ("responded" in message_data && message_data.responded === false) {
-              await fetch("https://api.blisty.com/ia")
-            }
-          */
+          if ("responded" in message_data && message_data.responded === false) {
+            console.log("Petición de chat a IA");
+            aiChatPetition(user.uid, roomId);
+          }
           return message_data;
         }) as MessageType[];
-        console.log(allMessages);
+        //console.log(allMessages);
         setMessages([...allMessages]);
       });
-
-      if (toUser.uid === "blisty") {
-        aiChatPetition(user.uid, roomId);
-      }
       return unsubscribe;
     } catch (e) {
       console.error(e);
@@ -144,7 +144,7 @@ export default function Md() {
       );
 
       const messagesRef = collection(roomRef, "messages");
-      const new_refresh = await addDoc(messagesRef, {
+      await addDoc(messagesRef, {
         type: "refresh_notification",
         text: "Comenzamos de nuevo!",
         createdAt: Timestamp.fromDate(new Date()),
@@ -152,7 +152,7 @@ export default function Md() {
         to: toUser.uid,
         responded: true,
       });
-      await aiChatPetition(user.uid, roomId);
+      aiChatPetition(user.uid, roomId);
       //console.log(new_refresh);
     } catch (e) {
       console.error(e);
@@ -195,10 +195,7 @@ export default function Md() {
           to: toUser.uid,
           responded: false,
         });
-        const response = await aiChatPetition(user.uid, roomId);
-        console.log(newMessage);
         console.log("Document written with ID: ", newMessage.id);
-        console.log("Response aichat/ :", response);
       } else {
         const newMessage = await addDoc(messagesRef, {
           type: "contact",
@@ -207,7 +204,6 @@ export default function Md() {
           from: user.uid,
           to: toUser.uid,
         });
-        console.log(newMessage);
         console.log("Document written with ID: ", newMessage.id);
       }
     } catch (e) {
@@ -267,7 +263,7 @@ export default function Md() {
       scrollEnabled={false}
       keyboardVerticalOffset={91}
     >
-      <View style={{ height: hp("92%") }} className="bg-neutral-200">
+      <View style={{ height: hp("83%") }} className="bg-neutral-200">
         <StatusBar barStyle="light-content" />
         <MdHeder router={router} onRefresh={onRefresh} />
         <View className="h-2 bg-primary border-b border-neutral-300" />
