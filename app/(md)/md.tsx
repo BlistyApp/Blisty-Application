@@ -100,16 +100,16 @@ export default function Md() {
               : Timestamp.now();
 
           allMessages.push(message_data as MessageType);
-          if (
-            index === querySnapshot.docs.length - 1 &&
-            "responded" in message_data
-          ) {
-            if (message_data.responded === false) {
+          if (index === querySnapshot.docs.length - 1) {
+            if (
+              "responded" in message_data &&
+              message_data.responded === false
+            ) {
               setResponding(true);
               setMessages([...allMessages]);
-            } else {
-              setResponding(false);
             }
+          } else {
+            setResponding(false);
           }
           index++;
         }
@@ -136,6 +136,8 @@ export default function Md() {
       if (messages[messages?.length - 1].to === "blisty" && !api_Called) {
         setApi_Called(true);
         await aiChatPetition(user!.uid, getRoomId(user!.uid, toUser!.uid));
+        setApi_Called(false);
+        setResponding(false);
         return;
       }
     };
