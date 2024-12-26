@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   StatusBar,
@@ -33,6 +34,7 @@ import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
 import { useErrorStore } from "@/stores/ErrorsStore";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { set } from "react-hook-form";
 
 const { height } = Dimensions.get("window");
 
@@ -48,6 +50,7 @@ export default function Md() {
   const [messages, setMessages] = useState<MessageType[]>();
   const [loading, setLoading] = useState(true);
   const { setError } = useErrorStore((state) => state);
+  const [responding, setResponding] = useState<boolean>(false);
 
   useEffect(() => {
     scrollToEnd();
@@ -103,16 +106,25 @@ export default function Md() {
       const messagesRef = collection(roomRef, "messages");
       const messageQuery = query(messagesRef, orderBy("createdAt", "asc"));
 
-      const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
+      const unsubscribe = onSnapshot(messageQuery, async (querySnapshot) => {
         setLoading(false);
-        const allMessages = querySnapshot.docs.map((doc) => {
-          const message_data = doc.data();
-          if ("responded" in message_data && message_data.responded === false) {
-            console.log("Petición de chat a IA");
-            aiChatPetition(user.uid, roomId);
+        const allMessages: MessageType[] = [];
+        let index = 0;
+        for (const message of querySnapshot.docs) {
+          const message_data = message.data();
+          allMessages.push(message_data as MessageType);
+          if (
+            index === querySnapshot.docs.length - 1 &&
+            "responded" in message_data &&
+            message_data.responded === false
+          ) {
+            setResponding(true);
+            await aiChatPetition(user.uid, roomId);
+          } else {
+            setResponding(false);
           }
-          return message_data;
-        }) as MessageType[];
+          index++;
+        }
         //console.log(allMessages);
         setMessages([...allMessages]);
       });
@@ -152,7 +164,8 @@ export default function Md() {
         to: toUser.uid,
         responded: true,
       });
-      aiChatPetition(user.uid, roomId);
+
+      //aiChatPetition(user.uid, roomId);
       //console.log(new_refresh);
     } catch (e) {
       console.error(e);
@@ -206,6 +219,17 @@ export default function Md() {
         });
         console.log("Document written with ID: ", newMessage.id);
       }
+
+      setMessages([
+        ...messages!,
+        {
+          type: "contact",
+          text: meesageInput,
+          createdAt: Timestamp.fromDate(new Date()),
+          from: user.uid,
+          to: toUser.uid,
+        },
+      ]);
     } catch (e) {
       console.error(e);
       if (e instanceof BlistyError) {
@@ -307,18 +331,24 @@ export default function Md() {
                 style={{ width: "95%" }}
                 className="flex-row bg-white justify-between rounded-full border border-neutral-300"
               >
-                <TextInput
-                  onChangeText={(value) => (messageInRef.current = value)}
-                  ref={inRef}
-                  className="flex-1 p-2 mr-2 ml-2"
-                  style={{ fontSize: height * 0.018 }}
-                  scrollEnabled={true}
-                  multiline={true}
-                  placeholder="Type a message"
-                />
-                <Pressable onPress={onSend} className="self-center mr-2">
-                  <SendIcon size={38} color="#3e009c" />
-                </Pressable>
+                {responding ? (
+                  <Text className="text-neutral-300 p-2">Respondiendo...</Text>
+                ) : (
+                  <>
+                    <TextInput
+                      onChangeText={(value) => (messageInRef.current = value)}
+                      ref={inRef}
+                      className="flex-1 p-2 mr-2 ml-2"
+                      style={{ fontSize: height * 0.018 }}
+                      scrollEnabled={true}
+                      multiline={true}
+                      placeholder="Type a message"
+                    />
+                    <Pressable onPress={onSend} className="self-center mr-2">
+                      <SendIcon size={38} color="#3e009c" />
+                    </Pressable>
+                  </>
+                )}
               </View>
             </View>
           </View>
