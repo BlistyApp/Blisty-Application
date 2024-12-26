@@ -90,7 +90,6 @@ export default function Md() {
       const messageQuery = query(messagesRef, orderBy("createdAt", "asc"));
 
       const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
-        setLoading(false);
         const allMessages: MessageType[] = [];
         let index = 0;
         for (const message of querySnapshot.docs) {
@@ -103,18 +102,20 @@ export default function Md() {
           allMessages.push(message_data as MessageType);
           if (
             index === querySnapshot.docs.length - 1 &&
-            "responded" in message_data &&
-            message_data.responded === false
+            "responded" in message_data
           ) {
-            setResponding(true);
-            setMessages([...allMessages]);
-          } else {
-            setResponding(false);
+            if (message_data.responded === false) {
+              setResponding(true);
+              setMessages([...allMessages]);
+            } else {
+              setResponding(false);
+            }
           }
           index++;
         }
         //console.log(allMessages);
         setMessages([...allMessages]);
+        setLoading(false);
       });
       return unsubscribe;
     } catch (e) {
@@ -139,7 +140,7 @@ export default function Md() {
       }
     };
 
-    callApi();
+    if (toUser?.uid === "blisty") callApi();
   }, [messages]);
 
   if (!toUser || !user || !db) {
@@ -181,7 +182,7 @@ export default function Md() {
 
   const onSend = async () => {
     if (messageInRef.current.trim() === "") return;
-    setApi_Called(false);
+    if (toUser.uid === "blisty") setApi_Called(false);
     try {
       /* ------------------------
        const roomId = getRoomId(user.uid, toUser.uid);
