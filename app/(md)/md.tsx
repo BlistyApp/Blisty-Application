@@ -107,9 +107,10 @@ export default function Md() {
             ) {
               setResponding(true);
               setMessages([...allMessages]);
+            } else if (toUser.uid === "blisty") {
+              setApi_Called(false);
+              setResponding(false);
             }
-          } else {
-            setResponding(false);
           }
           index++;
         }
@@ -136,8 +137,6 @@ export default function Md() {
       if (messages[messages?.length - 1].to === "blisty" && !api_Called) {
         setApi_Called(true);
         await aiChatPetition(user!.uid, getRoomId(user!.uid, toUser!.uid));
-        setApi_Called(false);
-        setResponding(false);
         return;
       }
     };
@@ -287,7 +286,7 @@ export default function Md() {
         <StatusBar barStyle="light-content" />
         <MdHeder
           router={router}
-          onRefresh={responding ? onRefresh : undefined}
+          onRefresh={responding ? undefined : onRefresh}
         />
         <View className="h-2 bg-primary border-b border-neutral-300" />
         <View className="flex-1 justify-between bg-neutral-200">
