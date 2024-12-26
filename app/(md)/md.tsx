@@ -280,7 +280,7 @@ export default function Md() {
       scrollEnabled={false}
       keyboardVerticalOffset={91}
     >
-      <View style={{ height: hp("83%") }} className="bg-neutral-200">
+      <View style={{ height: hp("92%") }} className="bg-neutral-200">
         <StatusBar barStyle="light-content" />
         <MdHeder router={router} onRefresh={onRefresh} />
         <View className="h-2 bg-primary border-b border-neutral-300" />
