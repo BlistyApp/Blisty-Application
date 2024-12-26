@@ -29,12 +29,13 @@ import {
   orderBy,
   onSnapshot,
   getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import BlistyError from "@/lib/blistyError";
 import { useErrorStore } from "@/stores/ErrorsStore";
+import { aiChatPetition } from "@/lib/utils";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
-import { set } from "react-hook-form";
 
 const { height } = Dimensions.get("window");
 
@@ -51,6 +52,7 @@ export default function Md() {
   const [loading, setLoading] = useState(true);
   const { setError } = useErrorStore((state) => state);
   const [responding, setResponding] = useState<boolean>(false);
+  const [api_Called, setApi_Called] = useState<boolean>(false);
 
   useEffect(() => {
     scrollToEnd();
@@ -62,25 +64,6 @@ export default function Md() {
 
   const handleContentSizeChange = () => {
     scrollToEnd();
-  };
-
-  const aiChatPetition = async (userId: string, roomId: string) => {
-    try {
-      const response = await fetch(
-        "https://blisty-backend.vercel.app/ai-chat",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: userId,
-            roomId: roomId,
-          }),
-        }
-      );
-      return response;
-    } catch {}
   };
 
   useEffect(() => {
@@ -106,12 +89,17 @@ export default function Md() {
       const messagesRef = collection(roomRef, "messages");
       const messageQuery = query(messagesRef, orderBy("createdAt", "asc"));
 
-      const unsubscribe = onSnapshot(messageQuery, async (querySnapshot) => {
+      const unsubscribe = onSnapshot(messageQuery, (querySnapshot) => {
         setLoading(false);
         const allMessages: MessageType[] = [];
         let index = 0;
         for (const message of querySnapshot.docs) {
-          const message_data = message.data();
+          let message_data = message.data();
+          message_data.createdAt =
+            message_data.createdAt !== null
+              ? message_data.createdAt
+              : Timestamp.now();
+
           allMessages.push(message_data as MessageType);
           if (
             index === querySnapshot.docs.length - 1 &&
@@ -119,7 +107,7 @@ export default function Md() {
             message_data.responded === false
           ) {
             setResponding(true);
-            await aiChatPetition(user.uid, roomId);
+            setMessages([...allMessages]);
           } else {
             setResponding(false);
           }
@@ -141,6 +129,19 @@ export default function Md() {
     }
   }, [toUser]);
 
+  useEffect(() => {
+    const callApi = async () => {
+      if (!messages) return;
+      if (messages[messages?.length - 1].to === "blisty" && !api_Called) {
+        setApi_Called(true);
+        await aiChatPetition(user!.uid, getRoomId(user!.uid, toUser!.uid));
+        return;
+      }
+    };
+
+    callApi();
+  }, [messages]);
+
   if (!toUser || !user || !db) {
     return;
   }
@@ -159,7 +160,7 @@ export default function Md() {
       await addDoc(messagesRef, {
         type: "refresh_notification",
         text: "Comenzamos de nuevo!",
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: Timestamp.now(),
         from: user.uid,
         to: toUser.uid,
         responded: true,
@@ -180,7 +181,7 @@ export default function Md() {
 
   const onSend = async () => {
     if (messageInRef.current.trim() === "") return;
-
+    setApi_Called(false);
     try {
       /* ------------------------
        const roomId = getRoomId(user.uid, toUser.uid);
@@ -198,12 +199,13 @@ export default function Md() {
       }
 
       const messagesRef = collection(roomRef, "messages");
+      const createdAt = serverTimestamp();
 
       if (toUser.uid === "blisty") {
         const newMessage = await addDoc(messagesRef, {
           type: "contact",
           text: meesageInput,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt,
           from: user.uid,
           to: toUser.uid,
           responded: false,
@@ -213,23 +215,14 @@ export default function Md() {
         const newMessage = await addDoc(messagesRef, {
           type: "contact",
           text: meesageInput,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt,
           from: user.uid,
           to: toUser.uid,
         });
         console.log("Document written with ID: ", newMessage.id);
       }
 
-      setMessages([
-        ...messages!,
-        {
-          type: "contact",
-          text: meesageInput,
-          createdAt: Timestamp.fromDate(new Date()),
-          from: user.uid,
-          to: toUser.uid,
-        },
-      ]);
+      //await aiChatPetition(user.uid, roomId);
     } catch (e) {
       console.error(e);
       if (e instanceof BlistyError) {

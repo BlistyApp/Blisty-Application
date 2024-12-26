@@ -55,3 +55,23 @@ const opcionesHora = {
 export const formatHour = (date: Date) => {
   return date.toLocaleTimeString("es-PE", opcionesHora);
 };
+
+export const aiChatPetition = async (userId: string, roomId: string) => {
+  console.log("Petition to AI");
+  try {
+    const response = await fetch(
+      "https://blisty-backend.vercel.app/ai-chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userId,
+          roomId: roomId,
+        }),
+      }
+    );
+    return response;
+  } catch {}
+};

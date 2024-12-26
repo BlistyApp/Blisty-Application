@@ -26,6 +26,7 @@ import {
 import { useFirebaseStore } from "@/stores/FirebaseStore";
 import { RoomType } from "@/types/RoomType";
 import { useErrorStore } from "@/stores/ErrorsStore";
+import { aiChatPetition } from "@/lib/utils";
 import BlistyError from "@/lib/blistyError";
 
 const height = Dimensions.get("window").height;
@@ -83,7 +84,11 @@ export default function Chats() {
               messageQuery,
               async (querySnapshot) => {
                 if (querySnapshot.empty) return;
-                const lastMessage = querySnapshot.docs[0].data();
+                let lastMessage = querySnapshot.docs[0].data();
+                lastMessage.createdAt =
+                  lastMessage.createdAt !== null
+                    ? lastMessage.createdAt
+                    : Timestamp.now();
                 //console.log("DEL ROOM");
                 //console.log(roomData);
                 //console.log("LastMessage");
