@@ -283,7 +283,10 @@ export default function Md() {
     >
       <View style={{ height: hp("92%") }} className="bg-neutral-200">
         <StatusBar barStyle="light-content" />
-        <MdHeder router={router} onRefresh={onRefresh} />
+        <MdHeder
+          router={router}
+          onRefresh={responding ? onRefresh : undefined}
+        />
         <View className="h-2 bg-primary border-b border-neutral-300" />
         <View className="flex-1 justify-between bg-neutral-200">
           <View className="flex-1">

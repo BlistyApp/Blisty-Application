@@ -13,7 +13,7 @@ import {
 
 interface MdHederProps {
   router: Router;
-  onRefresh: () => void;
+  onRefresh?: () => void;
 }
 
 export default function MdHeder({ router, onRefresh }: MdHederProps) {
@@ -59,7 +59,7 @@ export default function MdHeder({ router, onRefresh }: MdHederProps) {
                 </Text>
               </View>
             </Pressable>
-            {toUser.uid === "blisty" && (
+            {toUser.uid === "blisty" && onRefresh && (
               <Pressable
                 onPress={() => {
                   onRefresh();
