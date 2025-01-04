@@ -15,14 +15,14 @@ export const getRoomId = (uid1: string, uid2: string) => {
 export const formatDate = (date: Date, includeYear?: boolean) => {
   let day = date.getDate();
   let months = [
-    "Jan",
+    "Ene",
     "Feb",
     "Mar",
-    "Apr",
+    "Abr",
     "May",
     "Jun",
     "Jul",
-    "Aug",
+    "Ago",
     "Sep",
     "Oct",
     "Nov",
